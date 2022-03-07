@@ -1,0 +1,39 @@
+/*==================== VARIABLES CSS ====================*/
+:root {
+  --gold-color: rgb(255,200,0);
+  --light-gold-color: rgb(255, 210, 0);
+  --mobile-width: 700px;
+}
+html {
+  overflow-y: scroll;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: lightgrey;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+button {
+  background-color: var(--gold-color);
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-weight: bold;
+  border: none;
+}
+
+button:hover {
+  cursor: pointer;
+  background-color: var(--light-gold-color);
+}
+
+
