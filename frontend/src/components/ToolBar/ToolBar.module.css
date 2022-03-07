@@ -27,6 +27,21 @@
     /*justify-content: space-evenly;*/
 }
 
+.toolbar_sign_out {
+    margin-left: auto;
+    width: 25px;
+    height: 25px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    border-radius: 100%;
+}
+
+.toolbar_sign_out:hover {
+    background-color: lightgrey;
+    cursor: pointer;
+}
+
 .warning {
     box-shadow: 0 0 10px red;
 }

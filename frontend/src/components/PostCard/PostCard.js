@@ -65,8 +65,7 @@ export const PostCard = ({id, title, content, time, author, topics, link, score,
 
   return (
     <div>
-      <div className={`${styles.post_container} ${linkable && postcardHover && styles.post_container_hover}`}
-           onClick={() => {linkable && postcardHover && navigate("/post/" + link)}}>
+      <div className={`${styles.post_container} ${linkable && postcardHover && styles.post_container_hover}`}>
         <div className={styles.score}>
           {userVote === "up" ?
             <TiMediaPlayReverse color={!upvoteHover?"grey":""} style={{"transform": "rotate(90deg)"}}
@@ -92,17 +91,20 @@ export const PostCard = ({id, title, content, time, author, topics, link, score,
                                 onMouseLeave={() => {setDownvoteHover(false)}}/>
           }
         </div>
-        <div className={styles.post} onMouseEnter={() => setPostcardHover(true)} onMouseLeave={() => setPostcardHover(false)}>
+        <div className={styles.post}>
+          <div className={styles.post_overlay} onClick={() => {linkable && navigate("/post/" + link)}}
+               onMouseEnter={() => setPostcardHover(true)}
+               onMouseLeave={() => setPostcardHover(false)}/>
           <div className={styles.post_title}>{title}</div>
           <div className={styles.post_details}>
               {showContent? <AiFillCloseCircle color={!hover?"grey":""} size={"1.8em"} onClick={() => setShowContent(!showContent)}
                                                className={styles.show_content_button}
-                                               onMouseEnter={() => {setHover(true); setPostcardHover(false)}}
-                                               onMouseLeave={() => {setHover(false); setPostcardHover(true)}}/>:
+                                               onMouseEnter={() => {setHover(true)}}
+                                               onMouseLeave={() => {setHover(false)}}/>:
                            <AiFillPlusCircle color={!hover?"grey":""} size={"1.8em"} onClick={() => setShowContent(!showContent)}
                                              className={styles.show_content_button}
-                                             onMouseEnter={() => {setHover(true); setPostcardHover(false)}}
-                                             onMouseLeave={() => {setHover(false); setPostcardHover(true)}}/>
+                                             onMouseEnter={() => {setHover(true)}}
+                                             onMouseLeave={() => {setHover(false)}}/>
               }
             <div className={styles.post_details_timestamp}>
               <div>submitted {getDisplayTime(time)} <span style={{"whiteSpace": "nowrap"}}>by {author}</span></div>
@@ -114,7 +116,7 @@ export const PostCard = ({id, title, content, time, author, topics, link, score,
             </div>
             <div className={styles.post_tags}>
               {topics && topics.map((topic) => {
-                return(<Link key={topic} to={"/topic/" + topic} onMouseEnter={() => setPostcardHover(false)} onMouseLeave={() => setPostcardHover(true)}>{topic}</Link>)
+                return(<Link key={topic} to={"/topic/" + topic}>{topic}</Link>)
               })}
             </div>
           </div>

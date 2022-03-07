@@ -36,6 +36,7 @@ export default function ToolBar({loginWarning, setLoginWarning}) {
       if (r == null) {
         console.log("err")
       } else {
+        setPostPopup(false);
         navigate("/post/" + r);
       }
     })
@@ -54,7 +55,9 @@ export default function ToolBar({loginWarning, setLoginWarning}) {
       {user?
         <div className={styles.toolbar_user_info}>
           Hi,&nbsp;<b>{user.displayName.substr(0, user.displayName.indexOf(" "))}</b>
-          <FaSignOutAlt style={{"marginLeft":"auto"}} onClick={signOut}/>
+          <div className={styles.toolbar_sign_out}>
+            <FaSignOutAlt onClick={signOut}/>
+          </div>
         </div>
         :<Tooltip open={loginWarning} title="You must login first!" placement="top">
             <button className={`${loginWarning && styles.warning} ${styles.toolbar_button}`}
