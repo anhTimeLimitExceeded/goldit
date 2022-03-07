@@ -1,6 +1,6 @@
 import styles from "./ToolBar.module.css";
 import React, {useContext, useState} from "react";
-import {Autocomplete, Dialog, Paper, TextField, Tooltip} from "@mui/material";
+import {Autocomplete, Dialog, Paper, Popper, TextField, Tooltip} from "@mui/material";
 import {AppContext} from "../../contexts/AppContext";
 import {signIn, signOut} from "../../firebase";
 import {FaSignOutAlt} from "react-icons/fa";
@@ -42,12 +42,16 @@ export default function ToolBar({loginWarning, setLoginWarning}) {
     })
   }
 
-  const PopperMy = function (props) {
+  const PaperMy = function (props) {
     return (<Paper {...props} sx={{
       "& .MuiAutocomplete-listbox": {backgroundColor: "lightgray"},
       "& .MuiAutocomplete-listbox .MuiAutocomplete-option[aria-selected='true']" : {backgroundColor: "rgb(255,200,0)"},
       "& .MuiAutocomplete-option.Mui-focused": {backgroundColor: "rgb(255,200,0)"},
     }} />)
+  }
+
+  const PopperMy = function (props) {
+    return (<Popper {...props} placement="top" modifiers={[{name: 'flip', enabled: false,}]}/>)
   }
 
   return (
@@ -79,7 +83,7 @@ export default function ToolBar({loginWarning, setLoginWarning}) {
             onChange={(e) => setPostContent(e.target.value)} onFocus={() => setContentWarning(false)}/>
           <div className={styles.post_pupup_topics_and_submit}>
             <div className={styles.post_pupup_topics}>
-              <h4>Topics: </h4>
+              <h4 style={{"margin-top":"0"}}>Topics: </h4>
               {topics && (<Autocomplete
                 className={`${topicsWarning && styles.warning} ${styles.post_topics_input}`}
                 fullWidth
@@ -87,11 +91,12 @@ export default function ToolBar({loginWarning, setLoginWarning}) {
                 id="size-small-outlined-multi"
                 size="small"
                 options={topics}
-                renderInput={(params) => (<TextField {...params} label="Select up to 5 topics"/>)}
-                getOptionDisabled={() => postTopics.length >= 5}
+                renderInput={(params) => (<TextField {...params} helperText="Select up to 3 topics"/>)}
+                getOptionDisabled={() => postTopics.length >= 3}
                 onChange={(e, value) => {setPostTopics(value)}}
                 onFocus={() => setTopicsWarning(false)}
-                PaperComponent={PopperMy}
+                PaperComponent={PaperMy}
+                PopperComponent={PopperMy}
                 sx = {{
                   "& .MuiAutocomplete-tag" : {backgroundColor:"rgb(255,200,0)"},
                   "& .MuiChip-deleteIcon" : {color: "dimgray"},
@@ -108,6 +113,8 @@ export default function ToolBar({loginWarning, setLoginWarning}) {
             <button className={styles.post_submit_button} onClick={createPostRequest}>
               Create post</button>
           </div>
+          <button className={styles.post_submit_button_mobile} onClick={createPostRequest}>
+            Create post</button>
         </div>
       </Dialog>
       <Dialog open={newTopicPopup} onClose={() => setNewTopicPopup(false)} fullWidth
