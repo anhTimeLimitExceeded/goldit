@@ -9,78 +9,24 @@
     height: 50px;
     border-bottom: gray 1px solid;
     overflow: hidden;
-}
-.navbar_topics {
-    width: 100%;
-    overflow-x: scroll;
-    display: flex;
-    flex-direction: row;
-    list-style: none;
-    margin: 0;
-    padding: 10px;
-
-    background-image: linear-gradient(to right, white, white), linear-gradient(to right, white, white), linear-gradient(to right, rgba(0, 0, 0, 0.25), rgba(255, 255, 255, 0)), linear-gradient(to left, rgba(0, 0, 0, 0.25), rgba(255, 255, 255, 0));
-    background-position: left center, right center, left center, right center;
-    background-repeat: no-repeat;
-    background-color: white;
-    background-size: 30px 100%, 30px 100%, 30px 100%, 30px 100%;
-    /* Opera doesn't support this in the shorthand */
-    background-attachment: local, local, scroll, scroll;
-}
-
-.navbar_topics::-webkit-scrollbar {
-    display: none;
-}
-
-.navbar_topic {
-    display: flex;
-    flex-direction: row;
     align-items: center;
-    padding-left: 5px;
-    padding-right: 5px;
+    justify-content: space-between;
+}
+.search_box {
+    margin: 0 10px;
+    width: 600px;
+    align-self: center;
 }
 
-.navbar_topic a:hover {
-    background-color: var(--gold-color);
-    color: black;
-}
-
-.navbar_topic a {
-    padding: 5px 10px;
-    border-radius: 20px;
-    text-decoration: none;
-    color: black;
-    font-weight: 600;
-    background-color: white;
-    border: 2px solid gray;
-}
-
-.navbar_topic_active a {
-    background-color: var(--gold-color)
-}
-
-.login_button {
-    display: flex;
-    padding: 5px 25px;
-    margin: auto 25px auto auto;
-    border-radius: 20px;
-    background-color: rgb(255, 200, 0);
-    font-weight: bold;
-    border: 2px solid transparent;
-}
-
-.login_button:hover {
-    cursor: pointer;
-    background-color: rgb(255, 210, 0);
-    border: 2px solid transparent;
-}
 
 .logo {
     height: 50px;
 }
 
 .burger_menu {
-    display: none;
+    height: 100%;
+    width: auto;
+    visibility: hidden;
 }
 
 .menu_popup {
@@ -92,6 +38,6 @@
 
 @media screen and (max-width: 700px) {
     .burger_menu {
-        display: flex;
+        visibility: visible;
     }
 }
