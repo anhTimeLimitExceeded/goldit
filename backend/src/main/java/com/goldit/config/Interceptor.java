@@ -25,6 +25,7 @@ public class Interceptor implements HandlerInterceptor {
 		}
 
 		MDC.put("reqid", String.valueOf(UUID.randomUUID()));
+		logger.info("["+ MDC.get("reqid") + "] " + request.getRequestURI());
 
 		UserRecord userRecord = null;
 

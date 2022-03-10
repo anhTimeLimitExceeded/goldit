@@ -64,8 +64,7 @@ export const PostCard = ({id, title, content, time, author, topics, link, score,
   }
 
   return (
-    <div>
-      <div className={`${styles.post_container} ${linkable && postcardHover && styles.post_container_hover}`}>
+    <div className={`${styles.post_container} ${linkable && postcardHover && styles.post_container_hover}`}>
         <div className={styles.score}>
           {userVote === "up" ?
             <TiMediaPlayReverse color={!upvoteHover?"grey":""} style={{"transform": "rotate(90deg)"}}
@@ -124,7 +123,6 @@ export const PostCard = ({id, title, content, time, author, topics, link, score,
             <p>{content}</p>
           </div>}
         </div>
-      </div>
-    </div>
+  </div>
   );
 }

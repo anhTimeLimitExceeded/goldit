@@ -24,8 +24,9 @@
 }
 
 .burger_menu {
-    height: 100%;
-    width: auto;
+    height: 25px;
+    width: 25px;
+    margin: 0 10px;
     visibility: hidden;
 }
 

@@ -5,7 +5,7 @@ import {AppContext} from "../../contexts/AppContext";
 import {signIn, signOut} from "../../firebase";
 import {FaSignOutAlt} from "react-icons/fa";
 import {createPost} from "../../utils";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 export default function ToolBar({loginWarning, setLoginWarning}) {
 
   const {user, topics} = useContext(AppContext)
@@ -55,7 +55,8 @@ export default function ToolBar({loginWarning, setLoginWarning}) {
   }
 
   return (
-    <div className={styles.toolbar}>
+    <div className={styles.sidebar}>
+      <div className={styles.toolbar}>
       {user?
         <div className={styles.toolbar_user_info}>
           Hi,&nbsp;<b>{user.displayName.substr(0, user.displayName.indexOf(" "))}</b>
@@ -130,6 +131,15 @@ export default function ToolBar({loginWarning, setLoginWarning}) {
           </div>
         </div>
       </Dialog>
+    </div>
+      <div className={styles.topics_bar}>
+        <div><b>Browse topics:</b></div>
+        <div className={styles.topics_list}>
+          {topics && topics.map((topic) => {
+            return <Link to={"/topic/" + topic} key={topic}>{topic}</Link>
+          })}
+        </div>
+      </div>
     </div>
   )
 }

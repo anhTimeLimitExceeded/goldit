@@ -30,8 +30,10 @@ export const NavBar = ({setShowBurgerMenu}) => {
           "& .MuiOutlinedInput-root.Mui-focused fieldset": {borderColor: "rgb(255,200,0)", borderRadius: "10px"},
         }}
       />
-      <GiHamburgerMenu size={"2\em"} style={{"margin":"auto 10px"}} onClick={() => setShowBurgerMenu(true)}
-                       className={styles.burger_menu}/>
+      <div>
+        <GiHamburgerMenu onClick={() => setShowBurgerMenu(true)} className={styles.burger_menu}/>
+      </div>
+
     </nav>
   );
 }

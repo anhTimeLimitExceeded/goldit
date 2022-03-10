@@ -1,8 +1,8 @@
 .container {
+    min-height: 50vh;
     padding: 20px;
     display: flex;
     flex-direction: row;
-
 }
 
 .toolbar_container {

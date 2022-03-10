@@ -1,7 +1,9 @@
-.toolbar {
+.sidebar {
     position: sticky;
     top: 80px;
     width: 60%;
+}
+.toolbar {
     background-color: white;
     border-radius: 5px;
     height: fit-content;
@@ -113,12 +115,49 @@
     margin: 10px;
 }
 
+.topics_bar {
+    margin-top: 10px;
+    background-color: white;
+    border-radius: 5px;
+    height: fit-content;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.topics_list {
+    display: flex;
+    flex-direction: column;
+}
+
+.topics_list a {
+    padding: 2px 5px;
+    border-radius: 5px;
+    margin: 3px;
+    text-decoration: none;
+    color: black;
+}
+
+.topics_list a:hover {
+    background-color: lightgrey;
+}
+
 @media screen and (max-width: 700px) {
 
-    .toolbar {
+    .sidebar {
         width: 100%;
+    }
+
+    .toolbar {
         box-shadow: 0 0 10px gray;
-        background-color: white;
+        border-radius: 5px;
+        height: fit-content;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .topics_bar {
+        box-shadow: 0 0 10px gray;
         border-radius: 5px;
         height: fit-content;
         display: flex;

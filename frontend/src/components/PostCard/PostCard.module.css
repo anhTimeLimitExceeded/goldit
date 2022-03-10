@@ -2,7 +2,7 @@
     background-color: white;
     display: flex;
     flex-direction: row;
-    margin: 0 20px 20px 20px;
+    margin: 20px;
     border-radius: 5px;
     justify-content: space-evenly;
 }
@@ -122,4 +122,15 @@
 .post_content p {
     margin: 0;
     padding: 10px;
+}
+
+@media screen and (max-width: 700px) {
+    .post_content {
+        background-color: white;
+        width: 90%;
+        margin: 10px 0;
+        border: 2px solid var(--gold-color);
+        border-radius: 10px;
+        z-index: 4;
+    }
 }

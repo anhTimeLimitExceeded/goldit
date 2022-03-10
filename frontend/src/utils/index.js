@@ -44,9 +44,9 @@ export const getPost = async (id, title) => {
   }
 };
 
-export const getPostByTopic = async (topic) => {
+export const getPostByTopic = async (topic, filter, filterArg) => {
   try {
-    return (await axios.get("/topic/" + topic, {
+    return (await axios.get(`/topic/${topic}?sort=${filter}&t=${filterArg}`, {
       headers: {
         authorization: await getIdToken(),
       }
