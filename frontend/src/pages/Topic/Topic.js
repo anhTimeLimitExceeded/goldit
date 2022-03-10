@@ -29,7 +29,7 @@ export default function Topic({setLoginWarning, setShowBurgerMenu}) {
   }, [setPosts, topic, user, sortFilter, sortFilterArg]);
 
   return (
-    <div className={styles.posts_container}>
+    <div>
       <div className={styles.topic_header}>
         <div className={styles.topic}>{topic}</div>
           <div className={styles.topic_filter}>
@@ -55,8 +55,8 @@ export default function Topic({setLoginWarning, setShowBurgerMenu}) {
                           time={post.createdAt} link={post.link} score={post.score} vote={post.vote} linkable={true}
                           setLoginWarning={setLoginWarning} setShowBurgerMenu={setShowBurgerMenu}/>);
       }) :
-        [...Array(10)].map((value, index, array) => {
-          return <Skeleton key={index} variant="rectangular" height={100} sx={{"margin": "20px", "borderRadius": "5px"}}/>
+        [...Array(10)].map((value, index) => {
+          return <Skeleton key={index} variant="rectangular" height={100} sx={{"margin": "10px 20px 20px 20px", "borderRadius": "5px"}}/>
         })
       }
     </div>

@@ -8,7 +8,7 @@ import {createPost} from "../../utils";
 import {Link, useNavigate} from "react-router-dom";
 export default function ToolBar({loginWarning, setLoginWarning}) {
 
-  const {user, topics} = useContext(AppContext)
+  const {user, topics, trendingTopics} = useContext(AppContext)
   const [postPopup, setPostPopup] = useState(false)
   const [postTitle, setPostTitle] = useState("");
   const [postContent, setPostContent] = useState("");
@@ -133,9 +133,9 @@ export default function ToolBar({loginWarning, setLoginWarning}) {
       </Dialog>
     </div>
       <div className={styles.topics_bar}>
-        <div><b>Browse topics:</b></div>
+        <div className={styles.topics_bar_header}><b>Trending:</b> <Link to={"/alltopics/"}>see all</Link></div>
         <div className={styles.topics_list}>
-          {topics && topics.map((topic) => {
+          {trendingTopics && trendingTopics.map((topic) => {
             return <Link to={"/topic/" + topic} key={topic}>{topic}</Link>
           })}
         </div>

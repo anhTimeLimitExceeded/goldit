@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
+import java.util.TreeMap;
 
 @Component
 public class DataHolder {
@@ -14,8 +14,8 @@ public class DataHolder {
 	TopicRepository topicRepository;
 
 	@Bean
-	public HashMap<String, Integer> topicsMap() {
-		HashMap<String, Integer> map = new HashMap<>();
+	public TreeMap<String, Integer> topicsMap() {
+		TreeMap<String, Integer> map = new TreeMap<>();
 		for (Entry e : topicRepository.getAllTopics()) {
 			map.put(e.getTitle(), e.getId());
 		}

@@ -20,24 +20,20 @@ export default function Post({setLoginWarning, setShowBurgerMenu}) {
 
   document.title = "Goldit: " + post?.title;
   return (
-    <div className={styles.posts_container}>
-      {post ?
-        <div>
-          <PostCard key={post.id} id={post.id} title={post.title} content={post.contents} topics={post.topics} author={post.author}
-                    time={post.createdAt} link={post.link} score={post.score} vote={post.vote} showContents={true} linkable={false}
-                    setLoginWarning={setLoginWarning} setShowBurgerMenu={setShowBurgerMenu}/>
-          <div className={styles1.comments_container}>
-            <textarea placeholder="Leave a comment" className={styles1.comment_input} rows="4"/>
-            420 Comments
-          </div>
+    post ?
+      <div>
+        <PostCard key={post.id} id={post.id} title={post.title} content={post.contents} topics={post.topics} author={post.author}
+                  time={post.createdAt} link={post.link} score={post.score} vote={post.vote} showContents={true} linkable={false}
+                  setLoginWarning={setLoginWarning} setShowBurgerMenu={setShowBurgerMenu}/>
+        <div className={styles1.comments_container}>
+          <textarea placeholder="Leave a comment" className={styles1.comment_input} rows="4"/>
+          420 Comments
         </div>
-        :
-        <div>
-          <Skeleton variant="rectangular" height={200} sx={{"margin": "20px", "borderRadius": "5px"}}/>
-          <Skeleton variant="rectangular" height={500} sx={{"margin": "20px", "borderRadius": "5px"}}/>
-        </div>
-
-      }
-    </div>
+      </div>
+      :
+      <div>
+        <Skeleton variant="rectangular" height={200} sx={{"margin": "10px 20px 20px 20px", "borderRadius": "5px"}}/>
+        <Skeleton variant="rectangular" height={500} sx={{"margin": "10px 20px 20px 20px", "borderRadius": "5px"}}/>
+      </div>
   );
 }

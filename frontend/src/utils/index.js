@@ -64,6 +64,14 @@ export const getTopics = async () => {
   }
 };
 
+export const getTrendingTopics = async () => {
+  try {
+    return (await axios.get("/topics/trending")).data;
+  } catch (e) {
+    console.warn(e);
+  }
+};
+
 export const postVote = async (postId, type) => {
   try {
     await axios.post("/vote", {

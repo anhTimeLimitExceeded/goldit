@@ -125,6 +125,18 @@
     flex-direction: column;
 }
 
+.topics_bar_header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.topics_bar_header a {
+    text-decoration: none;
+    color: black;
+    padding: 0 5px;
+    border-radius: 5px;
+}
+
 .topics_list {
     display: flex;
     flex-direction: column;
@@ -134,12 +146,6 @@
     padding: 2px 5px;
     border-radius: 5px;
     margin: 3px;
-    text-decoration: none;
-    color: black;
-}
-
-.topics_list a:hover {
-    background-color: lightgrey;
 }
 
 @media screen and (max-width: 700px) {

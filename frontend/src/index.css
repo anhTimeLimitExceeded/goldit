@@ -36,4 +36,12 @@ button:hover {
   background-color: var(--light-gold-color);
 }
 
+a {
+  color: black;
+  text-decoration: none;
+}
 
+a:hover {
+  cursor: pointer;
+  background-color: var(--light-gold-color);
+}

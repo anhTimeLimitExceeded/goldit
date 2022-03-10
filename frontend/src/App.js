@@ -4,13 +4,14 @@ import {Routes, Route} from "react-router-dom";
 import Topic from "./pages/Topic/Topic";
 import {auth} from "./firebase";
 import {AppContext} from "./contexts/AppContext";
-import {getTopics, postAuthInfo} from "./utils";
+import {getTopics, getTrendingTopics, postAuthInfo} from "./utils";
 import Post from "./pages/Post/Post";
 import {NavBar} from "./components/NavBar/NavBar";
 import styles from "./App.module.css";
 import ToolBar from "./components/ToolBar/ToolBar";
+import BrowseTopics from "./pages/BrowseTopics/BrowseTopics";
 function App() {
-  const { setUser, setTopics } = useContext(AppContext)
+  const { setUser, setTopics, setTrendingTopics } = useContext(AppContext)
   const [loginWarning, setLoginWarning] = useState(false)
   const getIsMobile = () => window.innerWidth <= 700;
 
@@ -35,7 +36,8 @@ function App() {
 
   useEffect(() => {
     (async () => {
-      setTopics(await getTopics())
+      setTopics(await getTopics());
+      setTrendingTopics(await  getTrendingTopics());
     })();
   }, [setTopics]);
 
@@ -43,11 +45,14 @@ function App() {
     <div className="App">
       <NavBar setShowBurgerMenu={setShowBurgerMenu}/>
       <div className={styles.container}>
-        <Routes>
-          <Route path='/' element={<Topic setLoginWarning={setLoginWarning} setShowBurgerMenu={setShowBurgerMenu}/>}/>
-          <Route path='/topic/:topic' element={<Topic setLoginWarning={setLoginWarning} setShowBurgerMenu={setShowBurgerMenu}/>}/>
-          <Route path='/post/:id/:title' element={<Post setLoginWarning={setLoginWarning} setShowBurgerMenu={setShowBurgerMenu}/>}/>
-        </Routes>
+        <div className={styles.content_container}>
+          <Routes>
+            <Route path='/' element={<Topic setLoginWarning={setLoginWarning} setShowBurgerMenu={setShowBurgerMenu}/>}/>
+            <Route path='/alltopics' element={<BrowseTopics/>}/>
+            <Route path='/topic/:topic' element={<Topic setLoginWarning={setLoginWarning} setShowBurgerMenu={setShowBurgerMenu}/>}/>
+            <Route path='/post/:id/:title' element={<Post setLoginWarning={setLoginWarning} setShowBurgerMenu={setShowBurgerMenu}/>}/>
+          </Routes>
+        </div>
 
         {isMobile?
           (showBurgerMenu &&

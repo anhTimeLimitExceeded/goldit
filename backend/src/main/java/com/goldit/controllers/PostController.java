@@ -23,9 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 @RestController
@@ -43,7 +43,7 @@ public class PostController {
 	@Autowired
 	VoteController voteController;
 	@Autowired
-	HashMap<String, Integer> topicsMap;
+	TreeMap<String, Integer> topicsMap;
 
 	@PostMapping("/post")
 	public String createPost(@RequestAttribute("userRecord") UserRecord userRecord, @RequestBody Map<String, Object> body) {
@@ -116,7 +116,7 @@ public class PostController {
 								postRepository.getPostsByTopicSortByDate(topicId, date);
 						break;
 					case "all":
-						posts = topic.equals("all") ? postRepository.getAllPosts() :
+						posts = topic.equals("all") ? postRepository.getAllPostsSortByNew() :
 								postRepository.getPostsByTopicSortByNew(topicId);
 						break;
 					default:

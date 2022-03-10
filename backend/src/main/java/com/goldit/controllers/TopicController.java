@@ -6,8 +6,9 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 @RestController
 public class TopicController {
@@ -15,12 +16,23 @@ public class TopicController {
 	@Autowired
 	TopicRepository topicRepository;
 	@Autowired
-	HashMap<String, Integer> topicsMap;
+	TreeMap<String, Integer> topicsMap;
 
 
 	@GetMapping(value="/topics", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Set<String> getTags() {
-		return topicsMap.keySet();
+	public SortedSet<String> getTopics() {
+		return topicsMap.navigableKeySet();
+	}
+
+	@GetMapping(value="/topics/trending", produces = MediaType.APPLICATION_JSON_VALUE)
+	public SortedSet<String> getTrendingTopics() {
+		SortedSet<String> set = new TreeSet<>();
+		set.add("econ");
+		set.add("philosophy");
+		set.add("computerscience");
+		set.add("math");
+		set.add("marketplace");
+		return set;
 	}
 
 }

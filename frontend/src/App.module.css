@@ -5,6 +5,10 @@
     flex-direction: row;
 }
 
+.content_container {
+    width: 70%;
+}
+
 .toolbar_container {
     margin: 0 auto;
     width: 400px;
@@ -31,7 +35,7 @@
         padding: 20px 0 0 0;
     }
 
-    .posts_container {
+    .content_container {
         width: 100%;
     }
 

@@ -1,0 +1,37 @@
+.container {
+    background-color: white;
+    margin: 10px 20px;
+    border-radius: 5px;
+    padding: 10px 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    font-weight: 600;
+    font-size: 24px;
+    margin: 0 10px 10px 0;
+}
+
+.row_container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.item_container {
+    width: 33%;
+    margin: 10px 5px;
+}
+
+.item_container a {
+    padding: 5px 15px;
+    border-radius: 5px;
+}
+
+@media screen and (max-width: 900px) {
+    .row_container {
+        display: flex;
+        flex-direction: column;
+    }
+}
