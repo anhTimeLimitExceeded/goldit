@@ -18,6 +18,7 @@ export const PostCard = ({id, title, content, time, author, topics, link, score,
   const [downvoteHover, setDownvoteHover] = useState(false);
   const [userVote, setUserVote] = useState(null);
   const [postScore, setPostScore] = useState(null);
+
   useEffect(() => {
     setPostScore(score);
     setUserVote(vote);

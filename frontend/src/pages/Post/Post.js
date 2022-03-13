@@ -16,9 +16,11 @@ export default function Post({setLoginWarning, setShowBurgerMenu}) {
 
   const renderComments = useCallback((comments, depth) => {
     return comments.map(comment => {
+
       return <CommentCard key={comment.id} id={comment.id} author={comment.author} contents={comment.contents}
-                          time={comment.createdAt} children={renderComments(comment.children, depth+1)}
-                          depth={depth}/>
+                          score={comment.score} vote={comment.vote} time={comment.createdAt}
+                          children={renderComments(comment.children, depth+1)} depth={depth}
+                          setLoginWarning={setLoginWarning} setShowBurgerMenu={setShowBurgerMenu}/>
     })
   }, [])
 
@@ -30,13 +32,20 @@ export default function Post({setLoginWarning, setShowBurgerMenu}) {
   }, [setPost, postId, title, user, renderComments]);
 
   const createCommentRequest = () => {
+    if (!user) {
+      setShowBurgerMenu(true);
+      setLoginWarning(true);
+      return;
+    }
     createComment({
       contents: comment,
       parentId: postId,
     }).then(comment => {
       setComment('')
-      const newComment = <CommentCard key={comment.id} id={comment.id} author={comment.author}
-                                      contents={comment.contents} time={comment.createdAt} depth={1} replied={true}/>;
+      const newComment = <CommentCard key={comment.id} id={comment.id} author={comment.author} score={comment.score}
+                                      vote={comment.vote} contents={comment.contents} time={comment.createdAt}
+                                      depth={1} replied={true} setLoginWarning={setLoginWarning}
+                                      setShowBurgerMenu={setShowBurgerMenu}/>;
       if (!postComments) {
         setPostComments([newComment])
       } else {
