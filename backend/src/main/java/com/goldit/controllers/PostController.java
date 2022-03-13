@@ -43,6 +43,8 @@ public class PostController {
 	@Autowired
 	VoteController voteController;
 	@Autowired
+	CommentController commentController;
+	@Autowired
 	TreeMap<String, Integer> topicsMap;
 
 	@PostMapping("/post")
@@ -60,19 +62,19 @@ public class PostController {
 		return post.getId() + "/" + title;
 	}
 
-	@GetMapping(value="/post/{id}/{title}", produces=MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value="/post/{postId}/{title}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public PostResponse getPost(@RequestAttribute(value = "userRecord", required = false) UserRecord userRecord,
-								@PathVariable int id, @PathVariable String title) {
+								@PathVariable int postId, @PathVariable String title) {
 		String uid = userRecord == null ? null : userRecord.getUid();
 		String spacedTitle = title.replaceAll("_", " ");
-		Entry post = postRepository.getPostByIdTitle(id, spacedTitle);
+		Entry post = postRepository.getPostByIdTitle(postId, spacedTitle);
 		ArrayList<String> topics = new ArrayList<>();
 		for (Relationship relationship : relationshipRepository.findByChildEquals(post.getId())) {
 			topics.add(topicRepository.findById(relationship.getParent()).getTitle());
 		}
 		return new PostResponse(post.getId(), post.getTitle(), post.getContents(), userRepository.findUserByUId(post.getAuthor()).getName(),
 				post.getCreatedAt(), topics, post.getId() + "/" + title, voteController.getVote(post.getId()),
-				voteController.getUserVote(post.getId(), uid));
+				voteController.getUserVote(post.getId(), uid), commentController.getPostCommentCount(postId));
 	}
 
 	@GetMapping(value="/topic/{topic}", produces=MediaType.APPLICATION_JSON_VALUE)
@@ -136,7 +138,7 @@ public class PostController {
 				postResponsesList.add(new PostResponse(post.getId(), post.getTitle(), post.getContents(),
 						userRepository.findUserByUId(post.getAuthor()).getName(), post.getCreatedAt(), topics,
 						post.getId() + "/" + title, voteController.getVote(post.getId()),
-						voteController.getUserVote(post.getId(), uid)));
+						voteController.getUserVote(post.getId(), uid), commentController.getPostCommentCount(post.getId())));
 		}
 
 		if ("top".equals(sort)) {

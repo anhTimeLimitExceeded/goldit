@@ -31,9 +31,36 @@ export const createPost = async (post) => {
   }
 };
 
+export const createComment = async (comment) => {
+  try {
+    return (await axios.post("/comment", comment,
+      {
+        headers: {
+          authorization: await getIdToken(),
+        },
+      }
+    )).data;
+  } catch (e) {
+    console.warn(e);
+  }
+};
+
 export const getPost = async (id, title) => {
   try {
     return (await axios.get("/post/" + id + "/" + title,
+      {
+        headers: {
+          authorization: await getIdToken(),
+        }
+      })).data;
+  } catch (e) {
+    console.warn(e);
+  }
+};
+
+export const getPostComments = async (postId) => {
+  try {
+    return (await axios.get("/comment/" + postId,
       {
         headers: {
           authorization: await getIdToken(),

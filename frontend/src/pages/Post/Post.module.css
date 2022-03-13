@@ -15,3 +15,8 @@
   font-size: 20px;
   font-family: inherit;
 }
+
+.comment_input:focus {
+  outline: none !important;
+  border: 2px solid var(--gold-color);
+}

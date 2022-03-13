@@ -50,7 +50,7 @@ function App() {
             <Route path='/' element={<Topic setLoginWarning={setLoginWarning} setShowBurgerMenu={setShowBurgerMenu}/>}/>
             <Route path='/alltopics' element={<BrowseTopics/>}/>
             <Route path='/topic/:topic' element={<Topic setLoginWarning={setLoginWarning} setShowBurgerMenu={setShowBurgerMenu}/>}/>
-            <Route path='/post/:id/:title' element={<Post setLoginWarning={setLoginWarning} setShowBurgerMenu={setShowBurgerMenu}/>}/>
+            <Route path='/post/:postId/:title' element={<Post setLoginWarning={setLoginWarning} setShowBurgerMenu={setShowBurgerMenu}/>}/>
           </Routes>
         </div>
 

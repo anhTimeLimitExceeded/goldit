@@ -1,0 +1,127 @@
+.comment_card_container {
+    display: flex;
+    flex-direction: row;
+    font-size: 14px;
+    padding: 0 5px 0 5px;
+    margin-top: 10px;
+}
+
+.comment_card_collapse_bar_container {
+    display: flex;
+    flex-direction: row;
+    width: 12px;
+    justify-content: center;
+}
+
+.comment_card_collapse_bar {
+    width: 5px;
+    border-radius: 15px;
+}
+
+.comment_card_collapse_bar_expand {
+    padding: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+}
+
+
+.comment_card_collapse_bar_container:hover {
+    cursor: pointer;
+}
+
+.comment_details {
+    display: flex;
+    flex-direction: column;
+    margin-left: 5px;
+    width: 100%;
+    border-radius: 5px;
+}
+
+.comment_card_details_replied {
+    animation: fade 2s linear;
+}
+
+@keyframes fade {
+    25% { background-color: var(--gold-color) }
+    0%, 100% { background-color: white }
+}
+
+.comment_author {
+    font-weight: 600;
+    margin-left: 5px;
+}
+
+.comment_time {
+    font-weight: normal;
+    font-style: italic;
+    color: grey;
+    padding-left: 10px;
+    font-size: 12px;
+}
+
+.comment_content {
+    font-size: 16px;
+    margin: 10px 5px;
+    white-space: pre-wrap;
+}
+
+.comment_card_taskbar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    margin-left: 8px;
+}
+
+.comment_reply {
+    font-weight: 600;
+    color: grey;
+    padding: 2px 5px;
+    border-radius: 5px;
+}
+
+.comment_reply:hover {
+    cursor: pointer;
+    background-color: lightgrey;
+}
+
+.comment_reply_container {
+    display: flex;
+    flex-direction: column;
+    max-width: 300px;
+}
+
+.comment_reply_input {
+    margin: 5px;
+    resize: none;
+    border: 2px solid gray;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 14px;
+    font-family: inherit;
+}
+
+.comment_reply_input:focus {
+    outline: none !important;
+    border: 2px solid var(--gold-color);
+}
+
+.comment_reply_container_taskbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    gap: 10px;
+}
+
+.score {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    gap: 10px;
+}
+
+.comment_reply_container_taskbar button {
+    padding: 5px 10px;
+}

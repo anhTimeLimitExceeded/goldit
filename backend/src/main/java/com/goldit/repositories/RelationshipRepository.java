@@ -9,6 +9,6 @@ public interface RelationshipRepository extends CrudRepository<Relationship, Int
 
 	List<Relationship> findByChildEquals(int child);
 
-	List<Relationship> getAllByParentEquals(int parent);
+	List<Relationship> findByParentEquals(int parent);
 
 }

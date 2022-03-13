@@ -49,7 +49,7 @@ public class VoteController {
 	}
 
 	public String getUserVote(int postId, String uid) {
-		if (uid == null) return "";
+		if (uid == null) return "neither";
 		String entryId = String.valueOf(postId);
 		Vote vote = voteRepository.findVote(uid, entryId);
 		if (vote == null) {

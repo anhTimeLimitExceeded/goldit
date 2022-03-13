@@ -23,8 +23,10 @@ public class PostResponse {
 
 	private final String vote;
 
+	private final int commentCount;
+
 	public PostResponse(int id, String title, String contents, String author, Date createdAt, List<String> topics, String link,
-						int score, String vote) {
+						int score, String vote, int commentCount) {
 		this.id = id;
 		this.title = title;
 		this.contents = contents;
@@ -34,6 +36,7 @@ public class PostResponse {
 		this.link = link;
 		this.score = score;
 		this.vote = vote;
+		this.commentCount = commentCount;
 	}
 
 	public int getId() {
@@ -70,6 +73,10 @@ public class PostResponse {
 
 	public String getVote() {
 		return vote;
+	}
+
+	public int getCommentCount() {
+		return commentCount;
 	}
 
 	@Override

@@ -7,7 +7,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {getDisplayTime, postVote} from "../../utils";
 import {AppContext} from "../../contexts/AppContext";
 
-export const PostCard = ({id, title, content, time, author, topics, link, score, vote,
+export const PostCard = ({id, title, content, time, author, topics, link, score, vote, commentCount,
                            showContents=false, linkable=false,
                            setLoginWarning, setShowBurgerMenu}) => {
   const {user} = useContext(AppContext)
@@ -111,7 +111,7 @@ export const PostCard = ({id, title, content, time, author, topics, link, score,
           </div>
           <div className={styles.post_details_comments_and_tags}>
             <div className={styles.post_details_comments} onClick={() => navigate("/post/" + link)}>
-              <VscComment className={styles.post_details_comments_icon}/>420 comments
+              <VscComment className={styles.post_details_comments_icon}/>{commentCount} {commentCount>1?" comments":" comment"}
             </div>
             <div className={styles.post_tags}>
               {topics && topics.map((topic) => {
