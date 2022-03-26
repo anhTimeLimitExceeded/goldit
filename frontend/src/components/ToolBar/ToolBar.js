@@ -1,6 +1,6 @@
 import styles from "./ToolBar.module.css";
 import React, {useContext, useState} from "react";
-import {Autocomplete, Dialog, Paper, Popper, TextField, Tooltip} from "@mui/material";
+import {Autocomplete, Dialog, Fade, Paper, Popper, TextField, Tooltip} from "@mui/material";
 import {AppContext} from "../../contexts/AppContext";
 import {signIn, signOut} from "../../firebase";
 import {FaSignOutAlt} from "react-icons/fa";
@@ -64,7 +64,7 @@ export default function ToolBar({loginWarning, setLoginWarning}) {
             <FaSignOutAlt onClick={signOut}/>
           </div>
         </div>
-        :<Tooltip open={loginWarning} title="You must login first!" placement="top">
+        :<Tooltip open={loginWarning} title={<h2>You must login first!</h2>} placement="top">
             <button className={`${loginWarning && styles.warning} ${styles.toolbar_button}`}
                     onClick={() => {setLoginWarning(false); signIn()}}>Login</button>
         </Tooltip>
@@ -84,7 +84,7 @@ export default function ToolBar({loginWarning, setLoginWarning}) {
             onChange={(e) => setPostContent(e.target.value)} onFocus={() => setContentWarning(false)}/>
           <div className={styles.post_pupup_topics_and_submit}>
             <div className={styles.post_pupup_topics}>
-              <h4 style={{"margin-top":"0"}}>Topics: </h4>
+              <h4 style={{"marginTop":"0"}}>Topics: </h4>
               {topics && (<Autocomplete
                 className={`${topicsWarning && styles.warning} ${styles.post_topics_input}`}
                 fullWidth

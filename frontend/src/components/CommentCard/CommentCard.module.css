@@ -125,3 +125,7 @@
 .comment_reply_container_taskbar button {
     padding: 5px 10px;
 }
+
+.warning {
+    box-shadow: 0 0 10px red;
+}

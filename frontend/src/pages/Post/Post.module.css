@@ -6,6 +6,26 @@
   border-radius: 5px;
 }
 
+.comments_filters {
+  display: flex;
+  flex-direction: row;
+  padding: 0 20px;
+  align-items: center;
+}
+
+.comments_filter {
+  border-radius: 25px;
+  border: 2px solid gray;
+  font-size: 16px;
+  padding: 2px 10px;
+  margin: 0 10px 0 0;
+}
+
+.comments_filter:hover {
+  cursor: pointer;
+  background-color: var(--light-gold-color);
+}
+
 .comment_input {
   margin: 20px;
   resize: none;
@@ -20,3 +40,8 @@
   outline: none !important;
   border: 2px solid var(--gold-color);
 }
+
+.warning {
+  box-shadow: 0 0 10px red;
+}
+

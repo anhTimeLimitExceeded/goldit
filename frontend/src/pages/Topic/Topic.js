@@ -18,7 +18,7 @@ export default function Topic({setLoginWarning, setShowBurgerMenu}) {
   const filters = ["hot", "new", "top"]
   const dayFilters = ["day", "week", "month", "all"]
   const sortFilter = searchParams.get("sort")===null?"hot":searchParams.get("sort");
-  const sortFilterArg = searchParams.get("t")===null?"day":searchParams.get("t");
+  const sortFilterArg = searchParams.get("t")===null?"week":searchParams.get("t");
 
   useEffect(() => {
     setPosts(null);

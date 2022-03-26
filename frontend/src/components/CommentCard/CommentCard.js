@@ -13,7 +13,8 @@ export const CommentCard = ({id, author, contents, time, score, vote,
   const [collapseComment, setCollapseComment] = useState(false);
   const [collapseBarHover, setCollapseBarHover] = useState(false);
   const [showReply, setShowReply] = useState(false);
-  const [replyContent, setReplyContent] = useState(null);
+  const [replyContent, setReplyContent] = useState('');
+  const [replyWarning, setReplyWarning] = useState(false)
   const [childrenComments, setChildrenComments] = useState(children);
   const [upvoteHover, setUpvoteHover] = useState(false);
   const [downvoteHover, setDownvoteHover] = useState(false);
@@ -69,8 +70,12 @@ export const CommentCard = ({id, author, contents, time, score, vote,
       setLoginWarning(true);
       return;
     }
+
+    setReplyWarning(replyContent.length === 0);
+    if (replyContent.length === 0) return;
+
     setShowReply(false);
-    setReplyContent(null);
+    setReplyContent('');
     createComment({
       contents: replyContent,
       parentId: String(id),
@@ -99,48 +104,49 @@ export const CommentCard = ({id, author, contents, time, score, vote,
         }
       </div>
       <div className={`${styles.comment_details} ${replied && styles.comment_card_details_replied}`}>
-          <div className={styles.comment_author}>
-            {author}
-            {collapseComment && <span className={styles.comment_time}>
-              {commentScore < 1000? commentScore : Math.round(commentScore/100) / 10 + "k"} points</span>}
-            <span className={styles.comment_time}>submitted {getDisplayTime(time)}</span>
-          </div>
-          {!collapseComment &&
-            <div>
-              <div className={styles.comment_content}>{contents}</div>
-              <div className={styles.comment_card_taskbar}>
-                {userVote === "up" ?
-                  <TiMediaPlayReverse color={!upvoteHover?"grey":""} style={{"transform": "rotate(90deg)"}}
-                                      onClick={upvote} onMouseEnter={() => {setUpvoteHover(true)}}
-                                      onMouseLeave={() => {setUpvoteHover(false)}}/>
-                  :
-                  <TiMediaPlayReverseOutline color={!upvoteHover?"grey":""} style={{"transform": "rotate(90deg)"}}
-                                             onClick={upvote} onMouseEnter={() => {setUpvoteHover(true)}}
-                                             onMouseLeave={() => {setUpvoteHover(false)}}/>
-                }
-                {commentScore < 1000? commentScore : Math.round(commentScore/100) / 10 + "k"}
-                {userVote === "down" ?
-                  <TiMediaPlay color={!downvoteHover?"grey":""} style={{"transform":"rotate(90deg)"}}
-                               onClick={downvote} onMouseEnter={() => {setDownvoteHover(true)}}
-                               onMouseLeave={() => {setDownvoteHover(false)}}/>
-                  :
-                  <TiMediaPlayOutline color={!downvoteHover?"grey":""} style={{"transform":"rotate(90deg)"}}
-                                      onClick={downvote} onMouseEnter={() => {setDownvoteHover(true)}}
-                                      onMouseLeave={() => {setDownvoteHover(false)}}/>
-                }
-                {depth <= 5 && <div className={styles.comment_reply} onClick={() => setShowReply(!showReply)}>reply</div>}
-              </div>
-              {showReply && <div className={styles.comment_reply_container}>
-                <textarea placeholder="Reply this comment" className={styles.comment_reply_input} rows="3"
-                          onChange={(e) => setReplyContent(e.target.value)}/>
-                <div className={styles.comment_reply_container_taskbar}>
-                  <button onClick={() => setShowReply(false)}>cancel</button>
-                  <button onClick={() => createCommentRequest()}>submit</button>
-                </div>
-              </div>}
-              {childrenComments}
+        <div className={styles.comment_author}>
+          {author}
+          {collapseComment && <span className={styles.comment_time}>
+            {commentScore < 1000? commentScore : Math.round(commentScore/100) / 10 + "k"} points</span>}
+          <span className={styles.comment_time}>submitted {getDisplayTime(time)}</span>
+        </div>
+        {!collapseComment &&
+          <div>
+            <div className={styles.comment_content}>{contents}</div>
+            <div className={styles.comment_card_taskbar}>
+              {userVote === "up" ?
+                <TiMediaPlayReverse color={!upvoteHover?"grey":""} style={{"transform": "rotate(90deg)"}}
+                                    onClick={upvote} onMouseEnter={() => {setUpvoteHover(true)}}
+                                    onMouseLeave={() => {setUpvoteHover(false)}}/>
+                :
+                <TiMediaPlayReverseOutline color={!upvoteHover?"grey":""} style={{"transform": "rotate(90deg)"}}
+                                           onClick={upvote} onMouseEnter={() => {setUpvoteHover(true)}}
+                                           onMouseLeave={() => {setUpvoteHover(false)}}/>
+              }
+              {commentScore < 1000? commentScore : Math.round(commentScore/100) / 10 + "k"}
+              {userVote === "down" ?
+                <TiMediaPlay color={!downvoteHover?"grey":""} style={{"transform":"rotate(90deg)"}}
+                             onClick={downvote} onMouseEnter={() => {setDownvoteHover(true)}}
+                             onMouseLeave={() => {setDownvoteHover(false)}}/>
+                :
+                <TiMediaPlayOutline color={!downvoteHover?"grey":""} style={{"transform":"rotate(90deg)"}}
+                                    onClick={downvote} onMouseEnter={() => {setDownvoteHover(true)}}
+                                    onMouseLeave={() => {setDownvoteHover(false)}}/>
+              }
+              {depth <= 5 && <div className={styles.comment_reply} onClick={() => setShowReply(!showReply)}>reply</div>}
             </div>
-          }
+            {showReply && <div className={styles.comment_reply_container}>
+              <textarea placeholder="Reply this comment" className={`${replyWarning && styles.warning} ${styles.comment_reply_input}`}
+                        rows="3" onClick={() => setReplyWarning(false)}
+                        onChange={(e) => setReplyContent(e.target.value)}/>
+              <div className={styles.comment_reply_container_taskbar}>
+                <button onClick={() => setShowReply(false)}>cancel</button>
+                <button onClick={() => createCommentRequest()}>submit</button>
+              </div>
+            </div>}
+            {childrenComments}
+          </div>
+        }
       </div>
     </div>
   );

@@ -58,9 +58,9 @@ export const getPost = async (id, title) => {
   }
 };
 
-export const getPostComments = async (postId) => {
+export const getPostComments = async (postId, sortFilter) => {
   try {
-    return (await axios.get("/comment/" + postId,
+    return (await axios.get("/comment/" + postId + "?sort=" + sortFilter,
       {
         headers: {
           authorization: await getIdToken(),

@@ -117,6 +117,7 @@
     border: 2px solid var(--gold-color);
     border-radius: 10px;
     z-index: 4;
+    white-space: pre-wrap;
 }
 
 .post_content p {

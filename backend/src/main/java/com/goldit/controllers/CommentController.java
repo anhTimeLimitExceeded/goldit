@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -47,8 +49,7 @@ public class CommentController {
 		relationshipRepository.save(new Relationship(parentId, comment.getId()));
 		return new CommentResponse(comment.getId(), comment.getContents(),
 				userRepository.findUserByUId(comment.getAuthor()).getName(), comment.getCreatedAt(),
-				voteController.getVote(comment.getId()), voteController.getUserVote(comment.getId(), userRecord.getUid()),
-				getComments(comment.getId(), userRecord));
+				0, "neither", new ArrayList<>());
 	}
 
 	public int getPostCommentCount(int postId) {
@@ -65,7 +66,8 @@ public class CommentController {
 	}
 
 	@GetMapping(value="/comment/{parentId}", produces= MediaType.APPLICATION_JSON_VALUE)
-	public List<CommentResponse> getComments(@PathVariable int parentId, @RequestAttribute(value = "userRecord", required = false) UserRecord userRecord) {
+	public List<CommentResponse> getComments(@PathVariable int parentId, @RequestParam(name = "sort") String sort,
+											 @RequestAttribute(value = "userRecord", required = false) UserRecord userRecord) {
 		String uid = userRecord == null ? null : userRecord.getUid();
 		List<CommentResponse> comments = new ArrayList<>();
 		List<Relationship> children = relationshipRepository.findByParentEquals(parentId);
@@ -74,8 +76,12 @@ public class CommentController {
 			comments.add(new CommentResponse(comment.getId(), comment.getContents(),
 					userRepository.findUserByUId(comment.getAuthor()).getName(), comment.getCreatedAt(),
 					voteController.getVote(comment.getId()), voteController.getUserVote(comment.getId(), uid),
-					getComments(comment.getId(), userRecord)));
+					getComments(comment.getId(), sort, userRecord)));
 		}
+		if ("top".equals(sort))
+			comments.sort(Comparator.comparingInt(CommentResponse::getScore).reversed());
+		else
+			comments.sort(Comparator.comparing(CommentResponse::getCreatedAt).reversed());
 		return comments;
 	}
 }

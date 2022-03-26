@@ -90,7 +90,7 @@ public class PostController {
 		List<Entry> posts = new ArrayList<>();
 		switch (sort) {
 			case "hot": {
-				Date date = new Date(System.currentTimeMillis() - TimeUnit.DAYS.toMillis(4));
+				Date date = new Date(System.currentTimeMillis() - TimeUnit.DAYS.toMillis(10));
 				posts = topic.equals("all") ? postRepository.getAllPostsByDate(date) :
 						postRepository.getPostsByTopicSortByDate(topicId, date);
 				break;
@@ -146,7 +146,7 @@ public class PostController {
 		}
 
 		if ("hot".equals(sort)) {
-			postResponsesList.sort(Comparator.comparingInt(post -> -(post.getScore())));
+			postResponsesList.sort(Comparator.comparingInt(post -> -(post.getScore()+post.getCommentCount())));
 		}
 
 		return postResponsesList;
