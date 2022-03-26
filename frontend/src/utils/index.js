@@ -116,6 +116,14 @@ export const postVote = async (postId, type) => {
   }
 };
 
+export const getSearchResults = async (query) => {
+  try {
+    return (await axios.get("/search?q=" + query)).data;
+  } catch (e) {
+    console.warn(e);
+  }
+};
+
 //UTILS FUNCTIONS
 export const getDisplayTime = (time) => {
   const date = new Date(time)

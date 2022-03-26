@@ -18,6 +18,13 @@
     align-self: center;
 }
 
+.search_result {
+
+}
+
+.search_result:hover {
+    background-color: var(--light-gold-color);
+}
 
 .logo {
     height: 50px;

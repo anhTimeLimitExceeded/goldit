@@ -5,7 +5,6 @@ import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.auth.UserRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,12 +19,12 @@ public class Interceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 
+		request.setAttribute("startTime", System.currentTimeMillis());
+		request.setAttribute("reqid", UUID.randomUUID().toString());
+
 		if("1".equals(request.getParameter("debug"))){
 			return true;
 		}
-
-		MDC.put("reqid", String.valueOf(UUID.randomUUID()));
-		logger.info("["+ MDC.get("reqid") + "] " + request.getRequestURI());
 
 		UserRecord userRecord = null;
 
@@ -52,4 +51,13 @@ public class Interceptor implements HandlerInterceptor {
 		}
 		return true;
 	}
+
+	@Override
+	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+		long startTime = (Long) request.getAttribute("startTime");
+		long endTime = System.currentTimeMillis();
+		long executeTime = endTime - startTime;
+		logger.info("[{}], {}, {}ms", request.getAttribute("reqid"), request.getRequestURI(), executeTime);
+	}
+
 }

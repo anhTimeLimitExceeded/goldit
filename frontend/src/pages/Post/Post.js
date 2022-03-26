@@ -1,4 +1,4 @@
-import {Link, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import React, {useCallback, useContext, useEffect, useState} from "react";
 import styles from "../Post/Post.module.css";
 import {PostCard} from "../../components/PostCard/PostCard";
@@ -25,14 +25,14 @@ export default function Post({setLoginWarning, setShowBurgerMenu}) {
                           children={renderComments(comment.children, depth+1)} depth={depth}
                           setLoginWarning={setLoginWarning} setShowBurgerMenu={setShowBurgerMenu}/>
     })
-  }, [])
+  }, [setLoginWarning, setShowBurgerMenu])
 
   useEffect(() => {
     (async () => {
       setPost(await getPost(postId, title))
       setPostComments(renderComments(await getPostComments(postId, sortFilter), 1))
     })();
-  }, [setPost, postId, title, user, renderComments]);
+  }, [setPost, postId, title, user, renderComments, sortFilter]);
 
   const createCommentRequest = () => {
     if (!user) {
