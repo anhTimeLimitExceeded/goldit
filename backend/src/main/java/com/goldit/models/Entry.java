@@ -1,8 +1,10 @@
 package com.goldit.models;
 
+import com.goldit.models.converters.ListStringConverter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,6 +13,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "entry")
@@ -23,6 +26,9 @@ public class Entry {
 
 	private String contents;
 
+	@Convert(converter = ListStringConverter.class)
+	private List<String> images;
+
 	private String author;
 
 	@CreationTimestamp
@@ -30,9 +36,10 @@ public class Entry {
 	@Column(name = "created_at")
 	private Date createdAt;
 
-	public Entry(String title, String contents, String author, Date createdAt) {
+	public Entry(String title, String contents, List<String> images, String author, Date createdAt) {
 		this.title = title;
 		this.contents = contents;
+		this.images = images;
 		this.author = author;
 		this.createdAt = createdAt;
 	}
@@ -60,6 +67,14 @@ public class Entry {
 		this.contents = contents;
 	}
 
+	public List<String> getImages() {
+		return images;
+	}
+
+	public void setImages(List<String> images) {
+		this.images = images;
+	}
+
 	public String getAuthor() {
 		return author;
 	}
@@ -75,4 +90,13 @@ public class Entry {
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
 	}
+
+	public static String titleToLink(Entry post) {
+		String title = post.getTitle().length() > 10 ? post.getTitle().substring(0, 10) : post.getTitle();
+		title = title.replaceAll(" ", "_");
+//		title = title.replaceAll("/", "_");
+//		title = title.replaceAll("#", "_");
+		return post.getId() + "/" + title;
+	}
+
 }

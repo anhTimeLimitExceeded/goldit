@@ -6,8 +6,9 @@ import React, {useContext, useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {getDisplayTime, postVote} from "../../utils";
 import {AppContext} from "../../contexts/AppContext";
+import {ImageCarousel} from "../ImageCarousel/ImageCarousel";
 
-export const PostCard = ({id, title, content, time, author, topics, link, score, vote, commentCount,
+export const PostCard = ({id, title, content, images, time, author, topics, link, score, vote, commentCount,
                            showContents=false, linkable=false,
                            setLoginWarning, setShowBurgerMenu}) => {
   const {user} = useContext(AppContext)
@@ -120,8 +121,11 @@ export const PostCard = ({id, title, content, time, author, topics, link, score,
               })}
             </div>
           </div>
-          {showContent && <div className={styles.post_content}>
-            <p>{content}</p>
+          {showContent && <div>
+            <div className={styles.post_content}>
+              <p>{content}</p>
+            </div>
+            {images && <ImageCarousel images={images}/>}
           </div>}
         </div>
   </div>

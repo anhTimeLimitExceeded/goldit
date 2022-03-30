@@ -23,6 +23,7 @@
 }
 
 .search_result:hover {
+    cursor: pointer;
     background-color: var(--light-gold-color);
 }
 

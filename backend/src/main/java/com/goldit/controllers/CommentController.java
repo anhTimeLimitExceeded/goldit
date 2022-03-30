@@ -43,7 +43,7 @@ public class CommentController {
 
 	@PostMapping(value="/comment", produces= MediaType.APPLICATION_JSON_VALUE)
 	public CommentResponse createComment(@RequestAttribute("userRecord") UserRecord userRecord, @RequestBody Map<String, Object> body) {
-		Entry comment = new Entry(null, (String) body.get("contents"), userRecord.getUid(), new Date());
+		Entry comment = new Entry(null, (String) body.get("contents"), null, userRecord.getUid(), new Date());
 		commentRepository.save(comment);
 		int parentId = Integer.parseInt((String) body.get("parentId"));
 		relationshipRepository.save(new Relationship(parentId, comment.getId()));

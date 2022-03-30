@@ -1,4 +1,5 @@
 import axios from "axios";
+import Compress from "compress.js";
 import {getIdToken} from "../firebase";
 //API CALLS
 axios.defaults.baseURL = 'https://twiki.csc.depauw.edu/goldit/api';
@@ -140,3 +141,15 @@ export const getDisplayTime = (time) => {
     return "on " + date.toLocaleDateString();
   }
 }
+
+export const getBase64 = async image => {
+  const compress = new Compress()
+  const compressImage = await compress.compress([image], {
+    size: 1, // the max size in MB, defaults to 2MB
+    quality: 0.75, // the quality of the image, max is 1,
+    maxWidth: 1000, // the max width of the output image, defaults to 1920px
+    maxHeight: 1000, // the max height of the output image, defaults to 1920px
+    resize: true // defaults to true, set false if you do not want to resize the image width and height
+  })
+  return compressImage[0].prefix + compressImage[0].data;
+};

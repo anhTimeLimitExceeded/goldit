@@ -49,7 +49,10 @@ public class PostController {
 
 	@PostMapping("/post")
 	public String createPost(@RequestAttribute("userRecord") UserRecord userRecord, @RequestBody Map<String, Object> body) {
-		Entry post = new Entry((String) body.get("title"), (String) body.get("contents"), userRecord.getUid(), new Date());
+		@SuppressWarnings("unchecked")
+		Entry post = new Entry((String) body.get("title"), (String) body.get("contents"),
+				(List<String>) body.get("images"), userRecord.getUid(), new Date());
+
 		postRepository.save(post);
 		@SuppressWarnings("unchecked")
 		List<String> topics = (List<String>) body.get("topics");
@@ -57,9 +60,7 @@ public class PostController {
 			relationshipRepository.save(new Relationship(topicsMap.get(topic), post.getId()));
 		}
 
-		String title = post.getTitle().length() > 10 ? post.getTitle().substring(0, 10) : post.getTitle();
-		title = title.replaceAll(" ", "_");
-		return post.getId() + "/" + title;
+		return Entry.titleToLink(post);
 	}
 
 	@GetMapping(value="/post/{postId}/{title}", produces=MediaType.APPLICATION_JSON_VALUE)
@@ -72,8 +73,9 @@ public class PostController {
 		for (Relationship relationship : relationshipRepository.findByChildEquals(post.getId())) {
 			topics.add(topicRepository.findById(relationship.getParent()).getTitle());
 		}
-		return new PostResponse(post.getId(), post.getTitle(), post.getContents(), userRepository.findUserByUId(post.getAuthor()).getName(),
-				post.getCreatedAt(), topics, post.getId() + "/" + title, voteController.getVote(post.getId()),
+		return new PostResponse(post.getId(), post.getTitle(), post.getContents(), post.getImages(),
+				userRepository.findUserByUId(post.getAuthor()).getName(), post.getCreatedAt(), topics,
+				Entry.titleToLink(post), voteController.getVote(post.getId()),
 				voteController.getUserVote(post.getId(), uid), commentController.getPostCommentCount(postId));
 	}
 
@@ -133,11 +135,9 @@ public class PostController {
 			for (Relationship relationship : relationshipRepository.findByChildEquals(post.getId())) {
 				topics.add(topicRepository.findById(relationship.getParent()).getTitle());
 			}
-			String title = post.getTitle().length() > 10 ? post.getTitle().substring(0, 10) : post.getTitle();
-			title = title.replaceAll(" ", "_");
-				postResponsesList.add(new PostResponse(post.getId(), post.getTitle(), post.getContents(),
+				postResponsesList.add(new PostResponse(post.getId(), post.getTitle(), post.getContents(), post.getImages(),
 						userRepository.findUserByUId(post.getAuthor()).getName(), post.getCreatedAt(), topics,
-						post.getId() + "/" + title, voteController.getVote(post.getId()),
+						Entry.titleToLink(post), voteController.getVote(post.getId()),
 						voteController.getUserVote(post.getId(), uid), commentController.getPostCommentCount(post.getId())));
 		}
 

@@ -11,6 +11,8 @@ public class PostResponse {
 
 	private final String contents;
 
+	private final List<String> images;
+
 	private final String author;
 
 	private final Date createdAt;
@@ -25,11 +27,12 @@ public class PostResponse {
 
 	private final int commentCount;
 
-	public PostResponse(int id, String title, String contents, String author, Date createdAt, List<String> topics, String link,
-						int score, String vote, int commentCount) {
+	public PostResponse(int id, String title, String contents, List<String> images, String author, Date createdAt,
+						List<String> topics, String link, int score, String vote, int commentCount) {
 		this.id = id;
 		this.title = title;
 		this.contents = contents;
+		this.images = images;
 		this.author = author;
 		this.createdAt = createdAt;
 		this.topics = topics;
@@ -49,6 +52,10 @@ public class PostResponse {
 
 	public String getContents() {
 		return contents;
+	}
+
+	public List<String> getImages() {
+		return images;
 	}
 
 	public String getAuthor() {

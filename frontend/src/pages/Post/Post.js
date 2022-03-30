@@ -69,9 +69,9 @@ export default function Post({setLoginWarning, setShowBurgerMenu}) {
   return (
     <div>
       {post ?
-        <PostCard key={post.id} id={post.id} title={post.title} content={post.contents} topics={post.topics} author={post.author}
-                          time={post.createdAt} link={post.link} score={post.score} vote={post.vote} commentCount={post.commentCount}
-                          showContents={true} linkable={false} setLoginWarning={setLoginWarning} setShowBurgerMenu={setShowBurgerMenu}/>
+        <PostCard key={post.id} id={post.id} title={post.title} content={post.contents} images={post.images} topics={post.topics}
+                  author={post.author} time={post.createdAt} link={post.link} score={post.score} vote={post.vote} commentCount={post.commentCount}
+                  showContents={true} linkable={false} setLoginWarning={setLoginWarning} setShowBurgerMenu={setShowBurgerMenu}/>
       :
         <Skeleton variant="rectangular" height={200} sx={{"margin": "10px 20px 20px 20px", "borderRadius": "5px"}}/>
       }

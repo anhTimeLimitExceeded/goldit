@@ -30,9 +30,7 @@ public class SearchController {
 		List<SearchResponse> searchResults = new ArrayList<>();
 		for (Entry post : allPosts) {
 			if (searchResults.size() == 5) break;
-			String title = post.getTitle().length() > 10 ? post.getTitle().substring(0, 10) : post.getTitle();
-			title = title.replaceAll(" ", "_");
-			searchResults.add(new SearchResponse(post.getId(), post.getTitle(), post.getContents(), post.getId() + "/" + title));
+			searchResults.add(new SearchResponse(post.getId(), post.getTitle(), post.getContents(), Entry.titleToLink(post)));
 		}
 		return searchResults;
 	}

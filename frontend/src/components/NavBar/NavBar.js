@@ -8,8 +8,6 @@ import {
   InputAdornment,
   List,
   ListItem,
-  ListItemButton,
-  ListItemText,
   Paper,
   TextField
 } from "@mui/material";
