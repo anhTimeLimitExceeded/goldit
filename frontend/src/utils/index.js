@@ -72,9 +72,10 @@ export const getPostComments = async (postId, sortFilter) => {
   }
 };
 
-export const getPostByTopic = async (topic, filter, filterArg) => {
+export const getPostByTopic = async (topic, filter, filterArg, page) => {
+  page = page == null? 0 : page;
   try {
-    return (await axios.get(`/topic/${topic}?sort=${filter}&t=${filterArg}`, {
+    return (await axios.get(`/topic/${topic}?sort=${filter}&t=${filterArg}&p=${page}`, {
       headers: {
         authorization: await getIdToken(),
       }

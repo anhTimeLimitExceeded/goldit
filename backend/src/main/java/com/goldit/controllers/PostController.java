@@ -31,6 +31,8 @@ import java.util.concurrent.TimeUnit;
 @RestController
 public class PostController {
 
+	private static final int POSTS_PER_PAGE = 20;
+
 	Logger logger = LoggerFactory.getLogger(PostController.class);
 	@Autowired
 	PostRepository postRepository;
@@ -81,8 +83,10 @@ public class PostController {
 
 	@GetMapping(value="/topic/{topic}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<PostResponse> getPostFromTopic(@RequestAttribute(value = "userRecord", required = false) UserRecord userRecord,
-											   @PathVariable String topic, @RequestParam(name = "sort")  String sort,
-											   @RequestParam(name = "t")  String time) {
+											   @PathVariable String topic,
+											   @RequestParam(name = "sort") String sort,
+											   @RequestParam(name = "t") String time,
+											   @RequestParam(name = "p") int page) {
 		if (sort == null || topic == null) {
 			return null;
 		}
@@ -149,7 +153,8 @@ public class PostController {
 			postResponsesList.sort(Comparator.comparingInt(post -> -(post.getScore()+post.getCommentCount())));
 		}
 
-		return postResponsesList;
+		if (POSTS_PER_PAGE * page > postResponsesList.size()) return new ArrayList<>();
+		return postResponsesList.subList(POSTS_PER_PAGE * page, Math.min(POSTS_PER_PAGE * (page + 1), postResponsesList.size()));
 	}
 
 }
