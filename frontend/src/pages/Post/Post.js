@@ -6,6 +6,7 @@ import {createComment, getPost, getPostComments} from "../../utils";
 import {AppContext} from "../../contexts/AppContext";
 import {Skeleton} from "@mui/material";
 import {CommentCard} from "../../components/CommentCard/CommentCard";
+import Error from "../Error/Error";
 
 export default function Post({setLoginWarning, setShowBurgerMenu}) {
 
@@ -65,13 +66,15 @@ export default function Post({setLoginWarning, setShowBurgerMenu}) {
     setPostComments(renderComments(await getPostComments(postId, filter), 1));
   }
 
+  if (post === undefined) return <Error/>
+
   document.title = "Goldit: " + post?.title;
   return (
     <div>
       {post ?
         <PostCard key={post.id} id={post.id} title={post.title} content={post.contents} images={post.images} topics={post.topics}
-                  author={post.author} time={post.createdAt} link={post.link} score={post.score} vote={post.vote} commentCount={post.commentCount}
-                  showContents={true} linkable={false} setLoginWarning={setLoginWarning} setShowBurgerMenu={setShowBurgerMenu}/>
+                  author={post.author} isAuthor={post.isAuthor} time={post.createdAt} link={post.link} score={post.score} vote={post.vote} commentCount={post.commentCount}
+                  showContents={true} linkable={false} editable={true} setLoginWarning={setLoginWarning} setShowBurgerMenu={setShowBurgerMenu}/>
       :
         <Skeleton variant="rectangular" height={200} sx={{"margin": "10px 20px 20px 20px", "borderRadius": "5px"}}/>
       }

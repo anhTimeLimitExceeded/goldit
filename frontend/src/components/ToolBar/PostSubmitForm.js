@@ -4,22 +4,24 @@ import {BiImageAdd} from "react-icons/bi";
 import {useContext, useState} from "react";
 import { FileUploader } from "react-drag-drop-files";
 import {AppContext} from "../../contexts/AppContext";
-import {createPost, getBase64} from "../../utils";
+import {createPost, editPost, getBase64} from "../../utils";
 import {useNavigate} from "react-router-dom";
 import {IoMdCloseCircle} from "react-icons/io";
 
-export default function PostSubmitForm({postPopup, setPostPopup}) {
+export default function PostSubmitForm({postPopup, setPostPopup, editable=false, postId="",
+                                         postInitialTitle="", postInitialContent="",
+                                         postInitialTopics=[], postInitialImages=[]}) {
 
   const {topics} = useContext(AppContext)
-  const [postTitle, setPostTitle] = useState("");
-  const [postContent, setPostContent] = useState("");
-  const [postTopics, setPostTopics] = useState([]);
+  const [postTitle, setPostTitle] = useState(postInitialTitle);
+  const [postContent, setPostContent] = useState(postInitialContent);
+  const [postTopics, setPostTopics] = useState(postInitialTopics);
   const [titleWarning, setTitleWarning] = useState(false)
   const [contentWarning, setContentWarning] = useState(false)
   const [topicsWarning, setTopicsWarning] = useState(false)
   const [creatingPost, setCreatingPost] = useState(false)
+  const [images, setImages] = useState(postInitialImages);
 
-  const [images, setImages] = useState([]);
   const navigate = useNavigate();
 
   const PaperMy = function (props) {
@@ -33,6 +35,34 @@ export default function PostSubmitForm({postPopup, setPostPopup}) {
 
   const PopperMy = function (props) {
     return (<Popper {...props} placement="top" modifiers={[{name: 'flip', enabled: false,}]}/>)
+  }
+
+  const editPostRequest = async () => {
+    setTitleWarning(postTitle.length === 0)
+    setContentWarning(postContent.length === 0)
+    setTopicsWarning(postTopics.length === 0)
+    if (postTitle.length === 0 || postContent.length === 0 || postTopics.length === 0) return;
+    setCreatingPost(true);
+    const base64images = [];
+    for (let i = 0; i < images.length; i++) {
+      if (typeof images[i] === 'string') base64images.push(images[i])
+      else base64images.push(await getBase64(images[i]));
+    }
+
+    editPost(postId, {
+      title: postTitle,
+      contents: postContent,
+      topics: postTopics,
+      images: base64images,
+    }).then(r => {
+      if (r == null) {
+        console.log("err")
+      } else {
+        setCreatingPost(false);
+        setPostPopup(false);
+        window.location.reload();
+      }
+    })
   }
 
   const createPostRequest = async () => {
@@ -78,19 +108,23 @@ export default function PostSubmitForm({postPopup, setPostPopup}) {
     setImages(newImages);
   }
 
-
   return <Dialog open={postPopup} onClose={() => setPostPopup(false)} fullWidth
                   PaperProps={{style: {backgroundColor: "white", borderRadius: 10, maxWidth: "800px"}}}>
     {creatingPost? <div className={styles.posting_overlay}><CircularProgress size={100} sx={{"margin":"auto", "color": "rgb(255,200,0)"}} thickness={6}/></div>
     :<div className={styles.post_popup}>
-      <input placeholder="Title" type="text" value={postTitle} className={`${titleWarning && styles.warning} ${styles.post_popup_title}`} maxLength="250"
+      <input placeholder="Title" type="text" value={postTitle} maxLength="250" disabled={editable} style={editable?{"backgroundColor":"lightgrey"}:{}}
+             className={`${titleWarning && styles.warning} ${styles.post_popup_title}`}
              onChange={(e) => setPostTitle(e.target.value)} onFocus={() => setTitleWarning(false)}/>
       <textarea placeholder="Content" value={postContent} className={`${contentWarning && styles.warning} ${styles.post_popup_content}`} rows="8"
                 onChange={(e) => setPostContent(e.target.value)} onFocus={() => setContentWarning(false)}/>
       <div className={styles.post_images}>
         {images && images.map((image, index) => {
           return (<div style={{"position" : "relative"}} key={index}>
-            <img src={URL.createObjectURL(image)} alt={image.name} className={styles.post_image}/>
+            {(typeof image === 'string') ?
+              <img src={image} alt={image.name} className={styles.post_image}/>
+              :
+              <img src={URL.createObjectURL(image)} alt={image.name} className={styles.post_image}/>
+            }
             <IoMdCloseCircle className={styles.post_remove_image} size={25}
                              onClick={() => removeImage(index)}/>
           </div>)
@@ -112,6 +146,7 @@ export default function PostSubmitForm({postPopup, setPostPopup}) {
             id="size-small-outlined-multi"
             size="small"
             options={topics}
+            value={postTopics}
             renderInput={(params) => (<TextField {...params} helperText="Select up to 3 topics"/>)}
             getOptionDisabled={() => postTopics.length >= 3}
             onChange={(e, value) => {setPostTopics(value)}}
@@ -131,11 +166,17 @@ export default function PostSubmitForm({postPopup, setPostPopup}) {
             }}
           />)}
         </div>
-        <button className={styles.post_submit_button} onClick={createPostRequest}>
-          Create post</button>
+        {editable ?
+          <button className={styles.post_submit_button} onClick={editPostRequest}> Edit post</button>
+          :
+          <button className={styles.post_submit_button} onClick={createPostRequest}> Create post</button>
+        }
       </div>
-      <button className={styles.post_submit_button_mobile} onClick={createPostRequest}>
-        Create post</button>
+        {editable ?
+          <button className={styles.post_submit_button_mobile} onClick={editPostRequest}> Edit post</button>
+          :
+          <button className={styles.post_submit_button_mobile} onClick={createPostRequest}> Create post</button>
+        }
     </div>
     }
   </Dialog>

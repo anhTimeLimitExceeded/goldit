@@ -9,24 +9,27 @@ import java.util.List;
 
 public interface PostRepository extends CrudRepository<Entry, Integer> {
 
-	@Query("SELECT e FROM Entry e WHERE e.title IS NOT NULL AND e.contents IS NOT NULL ORDER BY e.id DESC")
+	@Query("SELECT e FROM Entry e WHERE e.title IS NOT NULL AND e.contents IS NOT NULL AND e.isDeleted = false ORDER BY e.id DESC")
 	List<Entry> getAllPosts();
 
-	@Query("SELECT e FROM Entry e WHERE e.title IS NOT NULL AND e.contents IS NOT NULL ORDER BY e.id DESC")
+	@Query("SELECT e FROM Entry e WHERE e.title IS NOT NULL AND e.contents IS NOT NULL AND e.isDeleted = false ORDER BY e.id DESC")
 	List<Entry> getAllPostsSortByNew();
 
-	@Query("SELECT e FROM Entry e WHERE e.title IS NOT NULL AND e.contents IS NOT NULL AND e.createdAt >= ?1 ORDER BY e.id DESC")
+	@Query("SELECT e FROM Entry e WHERE e.title IS NOT NULL AND e.contents IS NOT NULL AND e.isDeleted = false AND e.createdAt >= ?1 ORDER BY e.id DESC")
 	List<Entry> getAllPostsByDate(Date date);
 
-	@Query("SELECT e FROM Entry e WHERE e.id = ?1 AND e.title LIKE ?2%")
+	@Query("SELECT e FROM Entry e WHERE e.id = ?1 AND e.title LIKE ?2% AND e.isDeleted = false")
 	Entry getPostByIdTitle(int id, String title);
+
+	@Query("SELECT e FROM Entry e WHERE e.id = ?1 AND e.isDeleted = false")
+	Entry getPostById(int id);
 
 //	@Query("SELECT e FROM Entry e JOIN Relationship r ON e.id=r.child WHERE r.parent = ?1 ORDER BY e.id DESC")
 //	List<Entry> getPostsByTopic(int topicId);
 
-	@Query("SELECT e FROM Entry e JOIN Relationship r ON e.id=r.child WHERE r.parent = ?1 ORDER BY e.id DESC")
+	@Query("SELECT e FROM Entry e JOIN Relationship r ON e.id=r.child WHERE r.parent = ?1 AND e.isDeleted = false ORDER BY e.id DESC")
 	List<Entry> getPostsByTopicSortByNew(int topicId);
 
-	@Query("SELECT e FROM Entry e JOIN Relationship r ON e.id=r.child WHERE r.parent = ?1 AND e.createdAt >= ?2 ORDER BY e.id DESC")
+	@Query("SELECT e FROM Entry e JOIN Relationship r ON e.id=r.child WHERE r.parent = ?1 AND e.isDeleted = false AND e.createdAt >= ?2 ORDER BY e.id DESC")
 	List<Entry> getPostsByTopicSortByDate(int topicId, Date date);
 }

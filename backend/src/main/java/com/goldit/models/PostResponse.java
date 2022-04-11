@@ -15,6 +15,8 @@ public class PostResponse {
 
 	private final String author;
 
+	private final boolean isAuthor;
+
 	private final Date createdAt;
 
 	private final List<String> topics;
@@ -27,13 +29,14 @@ public class PostResponse {
 
 	private final int commentCount;
 
-	public PostResponse(int id, String title, String contents, List<String> images, String author, Date createdAt,
+	public PostResponse(int id, String title, String contents, List<String> images, String author, boolean isAuthor, Date createdAt,
 						List<String> topics, String link, int score, String vote, int commentCount) {
 		this.id = id;
 		this.title = title;
 		this.contents = contents;
 		this.images = images;
 		this.author = author;
+		this.isAuthor = isAuthor;
 		this.createdAt = createdAt;
 		this.topics = topics;
 		this.link = link;
@@ -60,6 +63,10 @@ public class PostResponse {
 
 	public String getAuthor() {
 		return author;
+	}
+
+	public boolean getIsAuthor() {
+		return isAuthor;
 	}
 
 	public Date getCreatedAt() {

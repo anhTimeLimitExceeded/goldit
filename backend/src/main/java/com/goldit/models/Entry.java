@@ -36,12 +36,16 @@ public class Entry {
 	@Column(name = "created_at")
 	private Date createdAt;
 
+	@Column(name = "is_deleted")
+	private boolean isDeleted;
+
 	public Entry(String title, String contents, List<String> images, String author, Date createdAt) {
 		this.title = title;
 		this.contents = contents;
 		this.images = images;
 		this.author = author;
 		this.createdAt = createdAt;
+		this.isDeleted = false;
 	}
 
 	public Entry() {
@@ -89,6 +93,14 @@ public class Entry {
 
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
+	}
+
+	public boolean isDeleted() {
+		return isDeleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		isDeleted = deleted;
 	}
 
 	public static String titleToLink(Entry post) {

@@ -59,6 +59,33 @@ export const getPost = async (id, title) => {
   }
 };
 
+export const editPost = async (id, post) => {
+  try {
+    return (await axios.put("/post/" + id, post,
+      {
+        headers: {
+          authorization: await getIdToken(),
+        },
+      }
+    )).data;
+  } catch (e) {
+    console.warn(e);
+  }
+};
+
+export const deletePost = async (id) => {
+  try {
+    return (await axios.delete("/post/" + id,
+      {
+        headers: {
+          authorization: await getIdToken(),
+        }
+      })).data;
+  } catch (e) {
+    console.warn(e);
+  }
+};
+
 export const getPostComments = async (postId, sortFilter) => {
   try {
     return (await axios.get("/comment/" + postId + "?sort=" + sortFilter,

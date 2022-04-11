@@ -59,11 +59,13 @@
 }
 
 .show_content_button {
+    color: grey;
     z-index: 4;
 }
 
 .show_content_button:hover {
     cursor: pointer;
+    color: black;
     margin: 0;
     padding: 0;
 }
@@ -74,6 +76,7 @@
     margin-top: 2px;
     font-size: 15px;
     align-items: center;
+    gap: 10px;
 }
 
 .post_details_comments {
@@ -94,6 +97,19 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+}
+
+.post_details_comments_edit_delete {
+    font-weight: 600;
+    color: grey;
+    padding: 2px 5px;
+    border-radius: 5px;
+    z-index: 4;
+}
+
+.post_details_comments_edit_delete:hover {
+    cursor: pointer;
+    background-color: lightgrey;
 }
 
 .post_tags a {
@@ -123,6 +139,15 @@
 .post_content p {
     margin: 0;
     padding: 10px;
+}
+
+.vote_button {
+    color: grey;
+    transform: rotate(90deg);
+}
+
+.vote_button:hover {
+    color: black;
 }
 
 @media screen and (max-width: 700px) {

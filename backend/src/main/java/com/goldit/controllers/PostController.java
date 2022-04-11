@@ -12,9 +12,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @RestController
 public class PostController {
@@ -76,9 +79,48 @@ public class PostController {
 			topics.add(topicRepository.findById(relationship.getParent()).getTitle());
 		}
 		return new PostResponse(post.getId(), post.getTitle(), post.getContents(), post.getImages(),
-				userRepository.findUserByUId(post.getAuthor()).getName(), post.getCreatedAt(), topics,
-				Entry.titleToLink(post), voteController.getVote(post.getId()),
+				userRepository.findUserByUId(post.getAuthor()).getName(), post.getAuthor().equals(uid),
+				post.getCreatedAt(), topics, Entry.titleToLink(post), voteController.getVote(post.getId()),
 				voteController.getUserVote(post.getId(), uid), commentController.getPostCommentCount(postId));
+	}
+
+	@DeleteMapping(value="/post/{postId}", produces=MediaType.APPLICATION_JSON_VALUE)
+	public void deletePost(@RequestAttribute(value = "userRecord") UserRecord userRecord, @PathVariable int postId) {
+		String uid = userRecord.getUid();
+		Entry post = postRepository.getPostById(postId);
+		if (!post.getAuthor().equals(uid)) return;
+		if (post.isDeleted()) return;
+
+		post.setDeleted(true);
+		postRepository.save(post);
+	}
+
+	@PutMapping(value="/post/{postId}", produces=MediaType.APPLICATION_JSON_VALUE)
+	public void editPost(@RequestAttribute(value = "userRecord") UserRecord userRecord, @PathVariable int postId,
+						 @RequestBody Map<String, Object> body) {
+		String uid = userRecord.getUid();
+		Entry post = postRepository.getPostById(postId);
+		if (!post.getAuthor().equals(uid)) return;
+		if (post.isDeleted()) return;
+
+		post.setContents((String) body.get("contents"));
+		@SuppressWarnings("unchecked")
+		List<String> images = (List<String>) body.get("images");
+		post.setImages(images);
+		@SuppressWarnings("unchecked")
+		List<String> newTopics = (List<String>) body.get("topics");
+		List<Integer> newTopicsIds = newTopics.stream().map((topic) -> topicsMap.get(topic)).collect(Collectors.toList());
+		List<Relationship> oldTopics = relationshipRepository.findByChildEquals(post.getId());
+
+		for (Integer topicId : newTopicsIds) {
+			if (relationshipRepository.findByRelationship(topicId, post.getId()) == null)
+				relationshipRepository.save(new Relationship(topicId, post.getId()));
+		}
+		for (Relationship oldTopicRelationship : oldTopics) {
+			if (!newTopicsIds.contains(oldTopicRelationship.getParent()))
+				relationshipRepository.delete(oldTopicRelationship);
+		}
+		postRepository.save(post);
 	}
 
 	@GetMapping(value="/topic/{topic}", produces=MediaType.APPLICATION_JSON_VALUE)
@@ -140,8 +182,8 @@ public class PostController {
 				topics.add(topicRepository.findById(relationship.getParent()).getTitle());
 			}
 				postResponsesList.add(new PostResponse(post.getId(), post.getTitle(), post.getContents(), post.getImages(),
-						userRepository.findUserByUId(post.getAuthor()).getName(), post.getCreatedAt(), topics,
-						Entry.titleToLink(post), voteController.getVote(post.getId()),
+						userRepository.findUserByUId(post.getAuthor()).getName(), post.getAuthor().equals(uid),
+						post.getCreatedAt(), topics, Entry.titleToLink(post), voteController.getVote(post.getId()),
 						voteController.getUserVote(post.getId(), uid), commentController.getPostCommentCount(post.getId())));
 		}
 

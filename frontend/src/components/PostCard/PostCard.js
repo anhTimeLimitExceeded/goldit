@@ -4,21 +4,22 @@ import {AiFillCloseCircle, AiFillPlusCircle} from "react-icons/ai";
 import {VscComment} from "react-icons/vsc";
 import React, {useContext, useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
-import {getDisplayTime, postVote} from "../../utils";
+import {deletePost, getDisplayTime, postVote} from "../../utils";
 import {AppContext} from "../../contexts/AppContext";
 import {ImageCarousel} from "../ImageCarousel/ImageCarousel";
+import {Dialog} from "@mui/material";
+import PostSubmitForm from "../ToolBar/PostSubmitForm";
 
-export const PostCard = ({id, title, content, images, time, author, topics, link, score, vote, commentCount,
-                           showContents=false, linkable=false,
+export const PostCard = ({id, title, content, images, time, author, isAuthor, topics, link, score, vote, commentCount,
+                           showContents=false, linkable=false, editable=false,
                            setLoginWarning, setShowBurgerMenu}) => {
   const {user} = useContext(AppContext)
   const [showContent, setShowContent] = useState(showContents);
-  const [hover, setHover] = useState(false);
   const [postcardHover, setPostcardHover] = useState(false);
-  const [upvoteHover, setUpvoteHover] = useState(false);
-  const [downvoteHover, setDownvoteHover] = useState(false);
   const [userVote, setUserVote] = useState(null);
   const [postScore, setPostScore] = useState(null);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [editPopup, setEditPopup] = useState(false);
 
   useEffect(() => {
     setPostScore(score);
@@ -65,31 +66,24 @@ export const PostCard = ({id, title, content, images, time, author, topics, link
     }
   }
 
+  const requestDeletePost = () => {
+    deletePost(id).then(r => {
+      navigate("/")
+    });
+  }
   return (
     <div className={`${styles.post_container} ${linkable && postcardHover && styles.post_container_hover}`}>
         <div className={styles.score}>
           {userVote === "up" ?
-            <TiMediaPlayReverse color={!upvoteHover?"grey":""} style={{"transform": "rotate(90deg)"}}
-                                       size={"1.5em"} onClick={upvote}
-                                       onMouseEnter={() => {setUpvoteHover(true)}}
-                                       onMouseLeave={() => {setUpvoteHover(false)}}/>
+            <TiMediaPlayReverse  className={styles.vote_button} size={"1.5em"} onClick={upvote}/>
             :
-            <TiMediaPlayReverseOutline color={!upvoteHover?"grey":""} style={{"transform": "rotate(90deg)"}}
-                                       size={"1.5em"} onClick={upvote}
-                                       onMouseEnter={() => {setUpvoteHover(true)}}
-                                       onMouseLeave={() => {setUpvoteHover(false)}}/>
+            <TiMediaPlayReverseOutline className={styles.vote_button} size={"1.5em"} onClick={upvote}/>
           }
           {postScore < 1000? postScore : Math.round(postScore/100) / 10 + "k"}
           {userVote === "down" ?
-            <TiMediaPlay color={!downvoteHover?"grey":""} style={{"transform":"rotate(90deg)"}} size={"1.5em"}
-                                onClick={downvote}
-                                onMouseEnter={() => {setDownvoteHover(true)}}
-                                onMouseLeave={() => {setDownvoteHover(false)}}/>
+            <TiMediaPlay className={styles.vote_button} size={"1.5em"} onClick={downvote}/>
             :
-            <TiMediaPlayOutline color={!downvoteHover?"grey":""} style={{"transform":"rotate(90deg)"}} size={"1.5em"}
-                                onClick={downvote}
-                                onMouseEnter={() => {setDownvoteHover(true)}}
-                                onMouseLeave={() => {setDownvoteHover(false)}}/>
+            <TiMediaPlayOutline className={styles.vote_button} size={"1.5em"} onClick={downvote}/>
           }
         </div>
         <div className={styles.post}>
@@ -98,21 +92,17 @@ export const PostCard = ({id, title, content, images, time, author, topics, link
                onMouseLeave={() => setPostcardHover(false)}/>
           <div className={styles.post_title}>{title}</div>
           <div className={styles.post_details}>
-              {showContent? <AiFillCloseCircle color={!hover?"grey":""} size={"1.8em"} onClick={() => setShowContent(!showContent)}
-                                               className={styles.show_content_button}
-                                               onMouseEnter={() => {setHover(true)}}
-                                               onMouseLeave={() => {setHover(false)}}/>:
-                           <AiFillPlusCircle color={!hover?"grey":""} size={"1.8em"} onClick={() => setShowContent(!showContent)}
-                                             className={styles.show_content_button}
-                                             onMouseEnter={() => {setHover(true)}}
-                                             onMouseLeave={() => {setHover(false)}}/>
+              {showContent?
+                <AiFillCloseCircle className={styles.show_content_button} size={"1.8em"} onClick={() => setShowContent(!showContent)}/>
+                :
+                <AiFillPlusCircle className={styles.show_content_button} size={"1.8em"} onClick={() => setShowContent(!showContent)}/>
               }
             <div className={styles.post_details_timestamp}>
               <div>submitted {getDisplayTime(time)} <span style={{"whiteSpace": "nowrap"}}>by {author}</span></div>
             </div>
           </div>
           <div className={styles.post_details_comments_and_tags}>
-            <div className={styles.post_details_comments} onClick={() => navigate("/post/" + link)}>
+            <div className={styles.post_details_comments}>
               <VscComment className={styles.post_details_comments_icon}/>{commentCount} {commentCount>1?" comments":" comment"}
             </div>
             <div className={styles.post_tags}>
@@ -120,6 +110,21 @@ export const PostCard = ({id, title, content, images, time, author, topics, link
                 return(<Link key={topic} to={"/topic/" + topic}>{topic}</Link>)
               })}
             </div>
+            {editable && isAuthor &&
+              <>
+                <div className={styles.post_details_comments_edit_delete} onClick={() => setEditPopup(true)}>edit</div>
+                <PostSubmitForm postPopup={editPopup} setPostPopup={setEditPopup} postId={id} postInitialTitle={title} postInitialContent={content} editable={true}
+                postInitialTopics={topics} postInitialImages={images}/>
+                <div className={styles.post_details_comments_edit_delete} onClick={() => setShowDeleteDialog(true)}>delete</div>
+                <Dialog open={showDeleteDialog} onClose={() => setShowDeleteDialog(false)} fullWidth>
+                  <h2 style={{"textAlign":"center"}}>Are you sure you want to delete this post?</h2>
+                  <div style={{"display":"flex", "justifyContent":"space-evenly", "marginBottom":"20px"}}>
+                    <button onClick={requestDeletePost}><h2 style={{"margin":"0"}}>Yes</h2></button>
+                    <button onClick={() => setShowDeleteDialog(false)}><h2 style={{"margin":"0"}}>No</h2></button>
+                  </div>
+                </Dialog>
+              </>
+            }
           </div>
           {showContent && <div>
             <div className={styles.post_content}>
