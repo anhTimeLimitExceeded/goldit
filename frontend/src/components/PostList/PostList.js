@@ -71,10 +71,11 @@ export default function PostList({setLoginWarning, setShowBurgerMenu, topic, sor
   }, [setPosts, user]);
 
   return <div>
-    {posts.length === 0 ?
-      [...Array(10)].map((value, index) => {
-        return <Skeleton key={index} variant="rectangular" height={100} sx={{"margin": "10px 20px 20px 20px", "borderRadius": "5px"}}/>
-      })
+    {posts.length === 0 ? (
+      isLoading ?
+        [...Array(10)].map((value, index) => {
+          return <Skeleton key={index} variant="rectangular" height={100} sx={{"margin": "10px 20px 20px 20px", "borderRadius": "5px"}}/>
+        }) :<div>There are no posts to be shown</div>)
       :
       posts.map((post, index) => {
         if (posts.length === index + 1) {

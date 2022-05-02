@@ -37,7 +37,7 @@ function App() {
   useEffect(() => {
     (async () => {
       setTopics(await getTopics());
-      setTrendingTopics(await  getTrendingTopics());
+      setTrendingTopics(await getTrendingTopics());
     })();
   }, [setTopics]);
 

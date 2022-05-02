@@ -51,6 +51,8 @@ public class PostController {
 	CommentController commentController;
 	@Autowired
 	TreeMap<String, Integer> topicsMap;
+	@Autowired
+	TreeMap<Integer, String> topicsIdMap;
 
 	@PostMapping("/post")
 	public String createPost(@RequestAttribute("userRecord") UserRecord userRecord, @RequestBody Map<String, Object> body) {
@@ -76,7 +78,7 @@ public class PostController {
 		Entry post = postRepository.getPostByIdTitle(postId, spacedTitle);
 		ArrayList<String> topics = new ArrayList<>();
 		for (Relationship relationship : relationshipRepository.findByChildEquals(post.getId())) {
-			topics.add(topicRepository.findById(relationship.getParent()).getTitle());
+			topics.add(topicsIdMap.get(relationship.getParent()));
 		}
 		return new PostResponse(post.getId(), post.getTitle(), post.getContents(), post.getImages(),
 				userRepository.findUserByUId(post.getAuthor()).getName(), post.getAuthor().equals(uid),
@@ -179,7 +181,7 @@ public class PostController {
 		for (Entry post : posts) {
 			ArrayList<String> topics = new ArrayList<>();
 			for (Relationship relationship : relationshipRepository.findByChildEquals(post.getId())) {
-				topics.add(topicRepository.findById(relationship.getParent()).getTitle());
+				topics.add(topicsIdMap.get(relationship.getParent()));
 			}
 				postResponsesList.add(new PostResponse(post.getId(), post.getTitle(), post.getContents(), post.getImages(),
 						userRepository.findUserByUId(post.getAuthor()).getName(), post.getAuthor().equals(uid),

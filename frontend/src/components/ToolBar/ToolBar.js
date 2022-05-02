@@ -40,10 +40,12 @@ export default function ToolBar({loginWarning, setLoginWarning}) {
 
     </div>
       <div className={styles.topics_bar}>
-        <div className={styles.topics_bar_header}><b>Trending:</b> <Link to={"/alltopics/"}>see all</Link></div>
+        <div className={styles.topics_bar_header}><b>Trending today:</b> <Link to={"/alltopics/"}>see all</Link></div>
         <div className={styles.topics_list}>
-          {trendingTopics && trendingTopics.map((topic) => {
-            return <Link to={"/topic/" + topic} key={topic}>{topic}</Link>
+          {trendingTopics && Object.entries(trendingTopics).map(([topic, value]) => {
+            return <Link to={"/topic/" + topic} key={topic}>
+              {topic}<span className={styles.topic_notification}>{value >= 100? "99+": value}</span>
+            </Link>
           })}
         </div>
       </div>

@@ -1,6 +1,6 @@
 import {Link, useParams, useSearchParams} from "react-router-dom";
 import styles from "./Topic.module.css"
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {FaChevronDown} from "react-icons/fa";
 import PostList from "../../components/PostList/PostList";
 export default function Topic({setLoginWarning, setShowBurgerMenu}) {
@@ -15,6 +15,10 @@ export default function Topic({setLoginWarning, setShowBurgerMenu}) {
   const dayFilters = ["day", "week", "month", "all"]
   const sortFilter = searchParams.get("sort")===null?"hot":searchParams.get("sort");
   const sortFilterArg = searchParams.get("t")===null?"week":searchParams.get("t");
+
+  useEffect(() => {
+    if (showSortFilterArg) setShowSortFilterArg(false)
+  }, [sortFilter, sortFilterArg])
 
   return (
     <div>
