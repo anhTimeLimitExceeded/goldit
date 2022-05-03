@@ -48,7 +48,7 @@ public class CommentController {
 		int parentId = Integer.parseInt((String) body.get("parentId"));
 		relationshipRepository.save(new Relationship(parentId, comment.getId()));
 		return new CommentResponse(comment.getId(), comment.getContents(),
-				userRepository.findUserByUId(comment.getAuthor()).getName(), comment.getCreatedAt(),
+				userRepository.findUserByUId(comment.getAuthor()).getUsername(), comment.getCreatedAt(),
 				0, "neither", new ArrayList<>());
 	}
 
@@ -74,7 +74,7 @@ public class CommentController {
 		for (Relationship child : children) {
 			Entry comment = commentRepository.findById(child.getChild());
 			comments.add(new CommentResponse(comment.getId(), comment.getContents(),
-					userRepository.findUserByUId(comment.getAuthor()).getName(), comment.getCreatedAt(),
+					userRepository.findUserByUId(comment.getAuthor()).getUsername(), comment.getCreatedAt(),
 					voteController.getVote(comment.getId()), voteController.getUserVote(comment.getId(), uid),
 					getComments(comment.getId(), sort, userRecord)));
 		}

@@ -6,13 +6,27 @@ axios.defaults.baseURL = 'https://twiki.csc.depauw.edu/goldit/api';
 
 export const postAuthInfo = async () => {
   try {
-    await axios.post("/auth", {},
+    return (await axios.post("/auth", {},
       {
         headers: {
           authorization: await getIdToken(),
         },
       }
-    );
+    )).data;
+  } catch (e) {
+    console.warn(e);
+  }
+};
+
+export const editUsername = async (body) => {
+  try {
+    return (await axios.put("/user", body,
+      {
+        headers: {
+          authorization: await getIdToken(),
+        },
+      }
+    )).data;
   } catch (e) {
     console.warn(e);
   }

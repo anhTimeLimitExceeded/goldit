@@ -10,13 +10,13 @@ public class User {
 	@Id
 	private String uid;
 
-	private String name;
+	private String username;
 
 	private String email;
 
-	public User(String uid, String name, String email) {
+	public User(String uid, String username, String email) {
 		this.uid = uid;
-		this.name = name;
+		this.username = username;
 		this.email = email;
 	}
 
@@ -32,12 +32,12 @@ public class User {
 		this.uid = uid;
 	}
 
-	public String getName() {
-		return name;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setName(String username) {
+		this.username = username;
 	}
 
 	public String getEmail() {
@@ -52,7 +52,7 @@ public class User {
 	public String toString() {
 		return "User{" +
 				"uid='" + uid + '\'' +
-				", name='" + name + '\'' +
+				", username='" + username + '\'' +
 				", email='" + email + '\'' +
 				'}';
 	}

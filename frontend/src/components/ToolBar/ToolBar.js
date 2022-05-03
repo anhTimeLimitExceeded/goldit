@@ -3,24 +3,37 @@ import React, {useContext, useState} from "react";
 import {Tooltip} from "@mui/material";
 import {AppContext} from "../../contexts/AppContext";
 import {signIn, signOut} from "../../firebase";
-import {FaSignOutAlt} from "react-icons/fa";
+import {FaEdit, FaSignOutAlt} from "react-icons/fa";
 import {Link} from "react-router-dom";
 import PostSubmitForm from "./PostSubmitForm";
 import TopicSubmitForm from "./TopicSubmitForm";
+import ProfileEditForm from "./ProfileEditForm";
 export default function ToolBar({loginWarning, setLoginWarning}) {
 
   const {user, trendingTopics} = useContext(AppContext)
   const [postPopup, setPostPopup] = useState(false)
   const [newTopicPopup, setNewTopicPopup] = useState(false)
+  const [profileEditPopup, setProfileEditPopup] = useState(false)
 
   return (
     <div className={styles.sidebar}>
       <div className={styles.toolbar}>
         {user?
           <div className={styles.toolbar_user_info}>
-            Hi,&nbsp;<b>{user.displayName.substr(0, user.displayName.indexOf(" "))}</b>
-            <div className={styles.toolbar_sign_out}>
-              <FaSignOutAlt onClick={signOut}/>
+            <div>Hi,&nbsp;<b>{user.displayName}</b></div>
+            <div className={styles.toolbar_user_buttons}>
+              <div onClick={() => setProfileEditPopup(true)}>
+                Edit profile
+                <div className={styles.toolbar_sign_out}>
+                  <FaEdit/>
+                </div>
+              </div>
+              <div onClick={signOut}>
+                Sign out
+                <div className={styles.toolbar_sign_out}>
+                  <FaSignOutAlt/>
+                </div>
+              </div>
             </div>
           </div>
           :<Tooltip open={loginWarning} title={<h2>You must login first!</h2>} placement="top">
@@ -37,6 +50,7 @@ export default function ToolBar({loginWarning, setLoginWarning}) {
 
         <PostSubmitForm postPopup={postPopup} setPostPopup={setPostPopup}/>
         <TopicSubmitForm newTopicPopup={newTopicPopup} setNewTopicPopup={setNewTopicPopup}/>
+        <ProfileEditForm newTopicPopup={profileEditPopup} setNewTopicPopup={setProfileEditPopup}/>
 
     </div>
       <div className={styles.topics_bar}>

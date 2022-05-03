@@ -81,7 +81,7 @@ public class PostController {
 			topics.add(topicsIdMap.get(relationship.getParent()));
 		}
 		return new PostResponse(post.getId(), post.getTitle(), post.getContents(), post.getImages(),
-				userRepository.findUserByUId(post.getAuthor()).getName(), post.getAuthor().equals(uid),
+				userRepository.findUserByUId(post.getAuthor()).getUsername(), post.getAuthor().equals(uid),
 				post.getCreatedAt(), topics, Entry.titleToLink(post), voteController.getVote(post.getId()),
 				voteController.getUserVote(post.getId(), uid), commentController.getPostCommentCount(postId));
 	}
@@ -184,7 +184,7 @@ public class PostController {
 				topics.add(topicsIdMap.get(relationship.getParent()));
 			}
 				postResponsesList.add(new PostResponse(post.getId(), post.getTitle(), post.getContents(), post.getImages(),
-						userRepository.findUserByUId(post.getAuthor()).getName(), post.getAuthor().equals(uid),
+						userRepository.findUserByUId(post.getAuthor()).getUsername(), post.getAuthor().equals(uid),
 						post.getCreatedAt(), topics, Entry.titleToLink(post), voteController.getVote(post.getId()),
 						voteController.getUserVote(post.getId(), uid), commentController.getPostCommentCount(post.getId())));
 		}

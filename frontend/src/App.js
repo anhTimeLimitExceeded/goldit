@@ -17,8 +17,8 @@ function App() {
 
   useEffect(() => {
     auth.onAuthStateChanged(async (user) => {
+      if (user) await postAuthInfo().then(r => user.displayName = r.username);
       setUser(user);
-      if (user) await postAuthInfo();
     });
   }, [setUser]);
 
