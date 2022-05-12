@@ -58,7 +58,7 @@ export default function ToolBar({loginWarning, setLoginWarning}) {
         <div className={styles.topics_list}>
           {trendingTopics && Object.entries(trendingTopics).map(([topic, value]) => {
             return <Link to={"/topic/" + topic} key={topic}>
-              {topic}<span className={styles.topic_notification}>{value >= 100? "99+": value}</span>
+              {topic} {value > 0 && <span className={styles.topic_notification}>{value >= 100 ? "99+" : value}</span>}
             </Link>
           })}
         </div>

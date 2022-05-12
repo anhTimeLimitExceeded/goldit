@@ -30,7 +30,7 @@ public class TrendingTopicsScheduler {
 	@Autowired
 	RelationshipRepository relationshipRepository;
 
-	@Scheduled(fixedDelay = 1000 * 60 * 60, initialDelay = 1000)
+	@Scheduled(fixedDelay = 1000 * 60, initialDelay = 1000)
 	public void scheduleFixedDelayTask() {
 		Date today = new Date(System.currentTimeMillis() - TimeUnit.DAYS.toMillis(1));
 		List<Entry> todayPosts = postRepository.getAllPostsByDate(today);
@@ -43,9 +43,15 @@ public class TrendingTopicsScheduler {
 				topicIdCount.put(topicId, topicIdCount.get(topicId) + 1);
 			}
 		}
+		for (Integer topicId : topicsIdMap.keySet()) {
+			topicIdCount.putIfAbsent(topicId, 0);
+		}
 		trendingTopicsMap.clear();
 		topicIdCount.entrySet().stream().sorted(Comparator.comparingInt(es -> -es.getValue())) // Decreasing; neg. sizes.
-				.forEach(es -> trendingTopicsMap.put(topicsIdMap.get(es.getKey()), es.getValue()));
+				.forEach(es -> {
+					if (trendingTopicsMap.size() >= 5) return;
+					trendingTopicsMap.put(topicsIdMap.get(es.getKey()), es.getValue());
+				});
 	}
 
 }

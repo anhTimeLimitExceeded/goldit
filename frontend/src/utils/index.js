@@ -142,6 +142,20 @@ export const getTrendingTopics = async () => {
   }
 };
 
+export const postNewTopic = async (body) => {
+  try {
+    await axios.post("/topics/new", body,
+      {
+        headers: {
+          authorization: await getIdToken(),
+        },
+      }
+    );
+  } catch (e) {
+    console.warn(e);
+  }
+}
+
 export const postVote = async (postId, type) => {
   try {
     await axios.post("/vote", {
